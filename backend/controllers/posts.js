@@ -1,6 +1,7 @@
 const db = require("../models");
 const Posts = db.posts;
 const Op = db.Sequelize.Op;
+const sequelize = db.sequelize;
 
 // CREATE AND SAVE NEW POST
 exports.createPost = (req, res) => {
@@ -17,27 +18,27 @@ exports.createPost = (req, res) => {
     user_id: req.body.user_id,
     title: req.body.title,
     description: req.body.description,
-    imageURL: req.body.imageURL
+    imageURL: req.file ? `${req.protocol}://${req.get('host')}/images/${req.file.filename}` : null
   };
 
-  // Save Tutorial in the database
+  // Save Post in the database
   Posts.create(post)
-    .then(data => {
+    .then(data => { 
       res.send(data);
     })
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while creating the Tutorial."
+          err.message || "Some error occurred while creating the Post."
       });
     });
 };
 
-
-
 // FIND ALL POSTS 
-exports.findAllPosts = (req, res, next) => {
-  Posts.findAll().then(
+exports.getAllPosts = (req, res, next) => {
+  Posts.findAll({
+    // include: Comments
+  }).then(
     (posts) => {
       res.status(200).json(posts);
     }
@@ -52,7 +53,7 @@ exports.findAllPosts = (req, res, next) => {
 
 
 // FIND ONE POST
-exports.findOnePost = (req, res, next) => {
+exports.getOnePost = (req, res, next) => {
   Posts.findOne({
     where: {
       id: req.params.id

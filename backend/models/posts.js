@@ -2,7 +2,7 @@ module.exports = (sequelize, Sequelize) => {
   const Posts = sequelize.define("posts", {
     user_id: {
       type: Sequelize.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
     title: {
       type: Sequelize.STRING(100),
@@ -10,12 +10,11 @@ module.exports = (sequelize, Sequelize) => {
     },
     description: {
       type: Sequelize.STRING(300),
-      allowNull: false,
-      unique: true
+      allowNull: false
     },
     imageURL: {
       type: Sequelize.STRING(255),
-      allowNull: false,
+      allowNull: true,  
     }
   });
 

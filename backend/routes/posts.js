@@ -1,12 +1,14 @@
 module.exports = app => {
   const posts = require("../controllers/posts.js");
+  const router = require("express").Router();
 
-  var router = require("express").Router();
+  const auth = require('../middleware/auth');
+  const multer = require('../middleware/multer-config');
 
-  router.post("/", posts.createPost);
+  router.post("/", multer, posts.createPost);
 
-  router.get("/", posts.findAllPosts);
-  router.get("/:id", posts.findOnePost);
+  router.get("/", posts.getAllPosts);
+  router.get("/:id", posts.getOnePost);
 
   router.put("/:id", posts.updatePost);
 

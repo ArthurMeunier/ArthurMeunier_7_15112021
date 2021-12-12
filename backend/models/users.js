@@ -17,7 +17,7 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.STRING,
       allowNull: false,
     },
-    imageUrl: {
+    imageURL: {
       type: Sequelize.STRING(255),
     },
     admin: {

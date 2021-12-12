@@ -5,7 +5,8 @@ const app = express();
 
 
 var corsOptions = {
-  origin: "http://localhost:8080"
+  // ici tu défini quelle url a le droit d'accéder à ton api. C'est donc l'url du front qu'il faut mettre
+  origin: "http://localhost:8081"
 };
 
 app.use(cors(corsOptions));
@@ -17,6 +18,7 @@ const db = require("./models");
 db.sequelize.sync({ alter: true }).then(() => {
   console.log("Drop and re-sync db.");
 });
+
 // simple route
 app.get("/", (req, res) => {
   res.json({ message: "Backend online" });
