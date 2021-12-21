@@ -24,26 +24,26 @@ db.posts = require("./posts.js")(sequelize, Sequelize);
 db.comments = require("./comments.js")(sequelize, Sequelize);
 
 db.users.hasMany(db.posts, {
-  foreignKey: "user_id"
+  foreignKey: "userId"
 })
 db.posts.belongsTo(db.users, {
-  foreignKey: "user_id",
+  foreignKey: "userId",
   onDelete: "CASCADE"
 })
 
 db.posts.hasMany(db.comments, {
-  foreignKey: "post_id"
+  foreignKey: "postId"
 })
 db.comments.belongsTo(db.posts, {
-  foreignKey: "post_id",
+  foreignKey: "postId",
   onDelete: "CASCADE"
 })
 
 db.users.hasMany(db.comments, {
-  foreignKey: "user_id"
+  foreignKey: "userId"
 })
 db.comments.belongsTo(db.users, {
-  foreignKey: "user_id",
+  foreignKey: "userId",
   onDelete: "CASCADE"
 })
 

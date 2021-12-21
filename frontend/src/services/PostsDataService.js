@@ -10,7 +10,10 @@ class PostsDataService {
   }
 
   create(data) {
-    return http.post("/posts/", data);
+    return http.post("/posts/", data, {
+    headers: {
+      Authorization: "Bearer " + sessionStorage.token,
+    }});
   }
 
   update(id, data) {

@@ -2,99 +2,35 @@
   <div class="mainPosts">
     <Header />
 
-    <v-btn fab color="primary" @click="addPostRedirect()" fixed left top>
+    <v-btn class="posts__addpost" fab color="primary" @click="addPostRedirect()" fixed left top>
         <v-icon>mdi-plus</v-icon>
     </v-btn>
    
-    <v-card @click="postRedirect(post.id)" v-for="(post, index) in posts" :key="index"
-    :loading="loading"
-    class="mx-auto my-12 posts"
-    max-width="374"
-    >
- 
-    <v-card-title class="posts__title">{{post.title}}</v-card-title>
-    <v-img class="posts__img"
-      height="250"
-      src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
-    ></v-img>
+    <Posts />
 
-
-
-    <v-card-text class="posts__description">
-
-      <div>{{post.description}}</div>
-    </v-card-text>
-
-    <v-divider class="mx-4"></v-divider>
-
-    <div class="posts__react">
-      <div class="posts__reactleft">
-          <div class ="posts__reactlike">
-            <div class="posts__reactlikeicon">+</div>
-            <div class="posts__reactlikenumber">2</div>
-          </div>
-          <div class ="posts__reactdislike">
-            <div class="posts__reactdislikeicon">-</div>
-            <div class="posts__reactdislikenumber">4</div>
-          </div>      
-      </div>
-      <div class="posts__reactright">
-        <div class ="posts__reactcomment">
-          <div class="posts__reactcommenticon">Cmt</div>
-          <div class="posts__reactcommentnumber">6</div>
-        </div>   
-      </div>      
-    </div>
-
-
-  </v-card>
+    <Logout />
   </div>
 </template>
 
 
 <script>
 // import axios from "axios";
-import PostsDataService from "../services/PostsDataService";
 import Header from "../components/Header.vue";
+import Posts from "../components/Posts.vue";
+import Logout from "../components/Logout.vue";
+
 
 export default {
   name: "posts",
-  data() {
-    return {
-      posts: [],
-      title: "",
-      description: "",
-    };
-  },
   methods: {
     addPostRedirect() {
       this.$router.push("/addPost");
     },
-    postRedirect(id) {
-      this.$router.push(`/posts/${id}`);
-    },
-    getAllPosts() {
-      PostsDataService.getAll()
-        .then((response) => {
-          this.posts = response.data.map(this.getPostContent);
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
-    getPostContent(post) {
-      return {
-        id: post.id,
-        title: post.title,
-        description: post.description,
-      };
-    },
-  },
-  mounted() {
-    this.getAllPosts();
   },
   components: {
     Header,
+    Logout,
+    Posts,
   },
 };
 </script>
@@ -105,15 +41,9 @@ export default {
 @import "../scss/variables.scss";
 
 .mainPosts {
-  font-family: "Rajdhani", sans-serif;
   flex: 1 1 auto;
   max-width: 100%;
   position: relative;
-}
-
-.v-btn {
-  top: 6rem!important;
-  left: 1.5rem!important;
 }
 
 
@@ -122,6 +52,10 @@ export default {
   max-width: 800px!important;
   width: 800px;
   border-radius: 20px!important;
+  &__addpost {
+    top: 6rem!important;
+    left: 1.5rem!important;
+  }
   &__title {
     font-weight: 800!important;
   }

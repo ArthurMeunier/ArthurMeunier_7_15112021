@@ -50,6 +50,9 @@
         Créer mon compte
       </v-btn>
     </v-form>
+
+    <a href="/" class="signup__signin">J'ai déjà un compte</a>
+
   </div>
 
 </div> 
@@ -119,6 +122,9 @@ export default {
   @include flexcenter;
   &__signupbtn {
     margin-top: 1.5rem;
-}
+  }
+  &__signin {
+    margin-top: 4rem;
+  }
 }
 </style>

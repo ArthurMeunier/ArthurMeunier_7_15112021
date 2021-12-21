@@ -2,6 +2,7 @@ const db = require("../models");
 const Posts = db.posts;
 const Op = db.Sequelize.Op;
 const sequelize = db.sequelize;
+const jwt = require('jsonwebtoken');
 
 // CREATE AND SAVE NEW POST
 exports.createPost = (req, res) => {
@@ -13,15 +14,20 @@ exports.createPost = (req, res) => {
     return;
   }
 
+  const token = req.headers.authorization.split(' ')[1];
+  const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
+  userId = decodedToken.userId;
+
+
   // CREATE A POST
   const post = {
-    user_id: req.body.user_id,
+    userId: userId,
     title: req.body.title,
     description: req.body.description,
     imageURL: req.file ? `${req.protocol}://${req.get('host')}/images/${req.file.filename}` : null
   };
 
-  // Save Post in the database
+    // Save Post in the database
   Posts.create(post)
     .then(data => { 
       res.send(data);

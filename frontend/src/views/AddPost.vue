@@ -2,28 +2,49 @@
 <div class="mainAddPost">
 
   <Header />
-  <h1>Page AddPost</h1>
+  <h1>Ajouter une publication</h1>
   <div class="submit-form mt-3 mx-auto">
     <div v-if="!submitted">
-      <v-form ref="form" lazy-validation>
+      <v-form 
+        @keyup.enter="addPost"
+        class="addpost__form"
+        ref="form"
+        v-model="valid"
+        >
         <v-text-field
           v-model="post.title"
-          :rules="[(v) => !!v || 'Title is required']"
-          label="Title"
+          :rules="[(v) => !!v || 'Ce champs est requis']"
+          label="Titre"
           required
         ></v-text-field>
 
         <v-text-field
           v-model="post.description"
-          :rules="[(v) => !!v || 'Description is required']"
+          :rules="[(v) => !!v || 'Ce champs est requis']"
           label="Description"
           required
         ></v-text-field>
+
+        <!-- <v-file-input
+          accept="image/*"
+          label="Ajouter une image"
+        ></v-file-input> -->
+
+        <v-btn
+        :disabled="!valid"
+        color="primary"
+        class="addpost__addbtn"
+        @click="addPost"
+        >
+        Publier
+        </v-btn>
+
       </v-form>
 
-      <v-btn color="primary" class="mt-3" @click="savePost">Submit</v-btn>
     </div>
   </div>
+
+  <Logout />
 
 </div>
 </template>
@@ -32,6 +53,7 @@
 <script>
 import PostsDataService from "../services/PostsDataService";
 import Header from '../components/Header.vue'
+import Logout from "../components/Logout.vue";
 
 
 export default {
@@ -40,7 +62,7 @@ export default {
     return {
       post: {
         id: null,
-        user_id: null,
+        userId: "",
         title: "",
         description: "",
         imageURL: null,
@@ -49,13 +71,17 @@ export default {
     };
   },
   methods: {
-    savePost() {
+    validate () {
+      this.$refs.form.validate()
+    },
+    addPost() {
       var data = {
-        user_id: this.post.user_id,
+        userId: this.post.userId,
         title: this.post.title,
         description: this.post.description,
         imageURL: this.post.imageURL,
       };
+
 
       PostsDataService.create(data)
         .then((response) => {
@@ -66,6 +92,7 @@ export default {
         .catch((e) => {
           console.log(e);
         });
+              window.location.reload();
       this.$router.push({ name: "posts" });
     },
 
@@ -76,12 +103,24 @@ export default {
   },
   components: {
     Header,
+    Logout,
   }
 };
 </script>
 
 
-<style>
+
+<style lang="scss">
+@import "../scss/mixins.scss";
+@import "../scss/variables.scss";
+
+.main {
+  @include flexcenter;
+  flex: 1 1 auto;
+  max-width: 100%;
+  position: relative;
+}
+
 .submit-form {
   max-width: 300px;
 }

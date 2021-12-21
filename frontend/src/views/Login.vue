@@ -79,7 +79,6 @@ export default {
 @import "../scss/variables.scss";
 
 .main {
-  font-family: "Rajdhani", sans-serif;
   @include flexcenter;
   flex: 1 1 auto;
   max-width: 100%;

@@ -6,7 +6,7 @@ module.exports = app => {
 
   router.post("/", auth, comments.createComment);
 
-  router.get("/", comments.findAllComments);
+  router.get("/", comments.getAllComments);
 
   router.delete("/:id", auth, comments.deleteComment);
 

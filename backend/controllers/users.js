@@ -25,13 +25,14 @@ exports.loginUser = (req, res) => {
           }
           // if they match
           res.status(200).json({ // return
-              userId: user.user_id,
+              userId: user.userId,
               token: jwt.sign(
-                  { userId: user.user_id },
+                  { userId: user.id },
                   "RANDOM_TOKEN_SECRET",
                   { expiresIn: '24h' }
               )
           });
+          console.log(user.id);
       })
       .catch(error => res.status(500).json({ error }));
   })

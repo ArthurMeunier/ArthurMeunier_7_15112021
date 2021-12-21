@@ -1,6 +1,6 @@
 module.exports = (sequelize, Sequelize) => {
   const Posts = sequelize.define("posts", {
-    user_id: {
+    userId: {
       type: Sequelize.INTEGER,
       allowNull: true,
     },

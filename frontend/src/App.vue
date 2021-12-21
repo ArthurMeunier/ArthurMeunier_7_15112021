@@ -17,4 +17,8 @@ export default {
 
 <style>
 
+.v-main {
+  font-family: 'Rajdhani', sans-serif;
+}
+
 </style>
