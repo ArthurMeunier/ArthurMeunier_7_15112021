@@ -6,7 +6,9 @@
   <ReturnToPosts/>
   <h1>Page Profile</h1>
   <div class="profile__firstname">{{ firstname }}</div>
-  
+  <div class="profile__firstname2">{{ user.firstname }}</div>
+  <div class="profile__lastname">{{ lastname }}</div>
+  <div class="profile__lastname2">{{ user.lastname }}</div>
   <Logout />
 </div>
 </template>
@@ -25,9 +27,6 @@ export default {
   data() {
     return {
       user: {},
-      id: "",
-      firstname: "",
-      lastname: "",
     };
   },
   methods: {
@@ -35,7 +34,7 @@ export default {
       UsersDataService.myprofile()
         .then((response) => {
           this.user = response.data;
-          this.firstname = "Robert";
+          console.log(this.firstname)
           console.log(response.data);
         })
         .catch((e) => {

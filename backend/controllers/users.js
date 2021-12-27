@@ -1,6 +1,8 @@
 const db = require("../models");
 const Users = db.users;
 const Op = db.Sequelize.Op;
+const sequelize = db.sequelize;
+const Sequelize = require("sequelize");
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 
@@ -172,16 +174,28 @@ exports.deleteUser = (req, res, next) => {
 };
 
 
+exports.getProfile = (req, res) => {
+  // On lit le post_id dans l'url
+  const token = req.headers.authorization.split(' ')[1];
+  const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
+  const userId = decodedToken.userId;
+  // On prépare la requête SQL pour récupérer les commentaires du post
+  const sql = `SELECT u.firstname, u.lastname, u.email FROM groupomania.users u WHERE u.id = ${userId}`
+  sequelize.query(sql, { type: Sequelize.QueryTypes.SELECT }).then(profile =>{
+    res.status(200).json(profile);
+  }).catch(err => {
+    res.status(500).json({
+      error: err
+    });
+  })
+};
+
 // exports.getProfile = (req, res) => {
-//   // On lit le post_id dans l'url
-//   const userId = req.query.userId
-//   // On prépare la requête SQL pour récupérer les commentaires du post
-//   const sql = `SELECT u.firstname, u.lastname, u.email FROM groupomania.users u WHERE u.id = ${userId}`
-//   sequelize.query(sql, { type: QueryTypes.SELECT }).then(profile =>{
-//     res.status(200).json(profile);
-//   }).catch(err => {
-//     res.status(500).json({
-//       error: err
-//     });
-//   })
+  
+// 	let profile = {
+// 		firstname: "bob",
+// 		lastname: "leponge",
+// 		id: 1
+// 	};
+// 	res.status(200).json(profile);
 // };
