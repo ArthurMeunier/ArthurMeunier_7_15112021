@@ -63,7 +63,6 @@ export default {
     getPost(id) {
       PostsDataService.get(id)
         .then((response) => {
-                console.log(id);
           this.post = response.data;
           console.log(response.data);
         })

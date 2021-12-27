@@ -2,13 +2,10 @@
 <div class="mainPosts">
 
   <Header/>
-  <div class="profile">
- 
-    <div class="profile__title">{{users.firstname}}</div>
 
-  </div>
   <ReturnToPosts/>
   <h1>Page Profile</h1>
+  <div class="profile__firstname">{{ firstname }}</div>
   
   <Logout />
 </div>
@@ -31,14 +28,13 @@ export default {
       id: "",
       firstname: "",
       lastname: "",
-      email: "",
     };
   },
   methods: {
-    getProfile(id) {
+    getUser(id) {
       UsersDataService.get(id)
         .then((response) => {
-          this.profile = response.data;
+          this.User = response.data;
           console.log(response.data);
         })
         .catch((e) => {
@@ -46,14 +42,14 @@ export default {
         });
     },
   },
+  mounted() {
+    this.getUser(this.$route.params.id);
+  },
   components: {
     Header,
-    ReturnToPosts,
     Logout,
-  },
-  mounted() {
-    this.getProfile(this.$route.params.id);
-  },
+    ReturnToPosts
+  }
 };
 </script>
 

@@ -9,6 +9,7 @@ module.exports = app => {
 
   router.get("/", users.getAllUsers);
   router.get("/:id", users.getOneUser);
+  // router.get("/", users.getProfile);
 
   router.put("/:id", auth, users.updateUser);
 

@@ -5,8 +5,8 @@ class commentsDataService {
     return http.get("/comments/");
   }
 
-  getAllByPost(post_id) {
-    return http.get(`comments/?post_id=${post_id}`);
+  getAllByPost(postId) {
+    return http.get(`comments/?postId=${postId}`);
   }
 
   

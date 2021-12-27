@@ -62,7 +62,7 @@ export default {
   },
   methods: {
     postRedirect(id) {
-      this.$router.push(`/posts/${id}`);
+      this.$router.push(`/Posts/${id}`);
     },
     getAllPosts() {
       PostsDataService.getAll()

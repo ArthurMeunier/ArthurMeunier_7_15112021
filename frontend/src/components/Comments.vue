@@ -41,8 +41,8 @@ export default {
     };
   },
   methods: {
-    getAllComments(post_id) {
-      CommentsDataService.getAllByPost(post_id)
+    getAllComments(postId) {
+      CommentsDataService.getAllByPost(postId)
         .then((response) => {
           this.comments = response.data.map(this.getCommentContent);
         })

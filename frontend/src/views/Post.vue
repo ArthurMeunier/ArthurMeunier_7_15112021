@@ -23,11 +23,6 @@ import Logout from "../components/Logout.vue";
 
 export default {
   name: "post",
-  methods: {
-    toPosts() {
-      this.$router.push("/Posts");
-    },
-  },
   components: {
     Header,
     ReturnToPosts,

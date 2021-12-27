@@ -39,7 +39,7 @@ import CommentsDataService from "../services/CommentsDataService";
       data: () => ({
       valid: true,
       comment: '',
-      userId: "1",
+      userId: "",
       postId: "",
       commentRules: [
         v => !!v || 'Ce champ est requis',

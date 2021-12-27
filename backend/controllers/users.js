@@ -170,3 +170,18 @@ exports.deleteUser = (req, res, next) => {
     }
   );
 };
+
+
+// exports.getProfile = (req, res) => {
+//   // On lit le post_id dans l'url
+//   const userId = req.query.userId
+//   // On prépare la requête SQL pour récupérer les commentaires du post
+//   const sql = `SELECT u.firstname, u.lastname, u.email FROM groupomania.users u WHERE u.id = ${userId}`
+//   sequelize.query(sql, { type: QueryTypes.SELECT }).then(profile =>{
+//     res.status(200).json(profile);
+//   }).catch(err => {
+//     res.status(500).json({
+//       error: err
+//     });
+//   })
+// };

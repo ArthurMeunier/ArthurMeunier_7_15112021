@@ -10,12 +10,14 @@
 </template>
 
 <script>
+
+
 export default {
   name: "Header",
   methods: {
     toProfile() {
-      this.$router.push("/Profile");
-    },
+      this.$router.push('/Profile');
+    }
   },
 };
 </script>
