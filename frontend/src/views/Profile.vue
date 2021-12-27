@@ -24,26 +24,28 @@ export default {
   name: "profile",
   data() {
     return {
-      user: [],
+      user: {},
       id: "",
       firstname: "",
       lastname: "",
     };
   },
   methods: {
-    getUser(id) {
-      UsersDataService.get(id)
+    getProfile() {
+      UsersDataService.myprofile()
         .then((response) => {
-          this.User = response.data;
+          this.user = response.data;
+          this.firstname = "Robert";
           console.log(response.data);
         })
         .catch((e) => {
+          console.error;
           console.log(e);
         });
     },
   },
   mounted() {
-    this.getUser(this.$route.params.id);
+    this.getProfile();
   },
   components: {
     Header,

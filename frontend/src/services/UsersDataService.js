@@ -9,6 +9,10 @@ class UsersDataService {
     return http.get(`/users/${id}`);
   }
 
+  myprofile() {
+    return http.get("/users/profile");
+  }
+
   create(firstname, lastname, email, password) {
     return http.post("/users/signup", {
         firstname: firstname,
