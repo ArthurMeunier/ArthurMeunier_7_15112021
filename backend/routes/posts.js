@@ -6,7 +6,7 @@ module.exports = app => {
   const auth = require('../middleware/auth');
   const multer = require('../middleware/multer-config');
 
-  router.post("/", multer, posts.createPost);
+  router.post("/", auth, multer, posts.createPost);
 
   router.get("/", posts.getAllPosts);
   router.get("/:id", posts.getOnePost);

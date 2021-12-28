@@ -48,13 +48,21 @@ export default {
   },
   methods: {
     getProfile() {
+      console.log("getProfile");
       UsersDataService.myprofile()
         .then((response) => {
+          console.log("then");
+          console.log(response.status);
           this.user = response.data[0]; 
         })
         .catch((e) => {
-          console.error;
           console.log(e);
+          console.log(e.response.status);
+          if (e.response.status == 401) {
+            sessionStorage.clear();
+            this.$router.push('/login')
+          }
+          // console.error;
         });
     },
   },

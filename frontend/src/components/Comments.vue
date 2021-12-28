@@ -11,7 +11,7 @@
           color="secondary"
           size="24"
         ></v-avatar>
-        <div class ="comments__user"> {{comment.firstname}} {{comment.lastname}} {{comment.createdAt}} </div>
+        <div class ="comments__user"> {{comment.firstname}} {{comment.lastname}} {{renderDate(comment.createdAt)}} </div>
       </div>
 
       <div class="comments__content">{{comment.comment}}</div>
@@ -59,7 +59,22 @@ export default {
         createdAt: comment.createdAt,
       };
     },
-  },
+    
+    renderDate(str)
+    {
+      function doubleDigits(n)
+      {
+        if(n<10)
+        {
+          return("0" + n);
+        }
+        return(n.toString());
+      }
+
+      let d = new Date(str);
+      return doubleDigits(d.getDate()) + "/" + doubleDigits(d.getMonth() + 1) + "/" + d.getFullYear() + " " + doubleDigits(d.getHours()) + "h" + doubleDigits(d.getMinutes());
+    },
+    },
   mounted() {
         this.getAllComments(this.$route.params.id);
   },

@@ -16,7 +16,9 @@ let instance = axios.create({
 });
 
 instance.interceptors.request.use(config => {
-  let auth ="Bearer " + sessionStorage.token,
+  let auth ="Bearer " + sessionStorage.token;
   config.headers.Authorization = auth;
   return config
 });
+
+export default instance;

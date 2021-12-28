@@ -176,9 +176,10 @@ exports.deleteUser = (req, res, next) => {
 
 exports.getProfile = (req, res) => {
   // On lit le post_id dans l'url
-  const token = req.headers.authorization.split(' ')[1];
-  const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
-  const userId = decodedToken.userId;
+  // const token = req.headers.authorization.split(' ')[1];
+  // const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
+  // const userId = decodedToken.userId;
+  const userId = req.userId;
   // On prépare la requête SQL pour récupérer les commentaires du post
   const sql = `SELECT u.firstname, u.lastname, u.email FROM groupomania.users u WHERE u.id = ${userId}`
   sequelize.query(sql, { type: Sequelize.QueryTypes.SELECT }).then(profile =>{
