@@ -4,7 +4,7 @@ module.exports = app => {
 
   const auth = require('../middleware/auth'); 
 
-  router.post("/", auth, comments.createComment);
+  router.post("/", comments.createComment);
 
   router.get("/", comments.getAllComments);
 

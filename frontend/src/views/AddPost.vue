@@ -2,6 +2,7 @@
 <div class="mainAddPost">
 
   <Header />
+  <ReturnToPosts/>
   <h1>Ajouter une publication</h1>
   <div class="submit-form mt-3 mx-auto">
     <div v-if="!submitted">
@@ -25,10 +26,10 @@
           required
         ></v-text-field>
 
-        <!-- <v-file-input
+        <v-file-input
           accept="image/*"
           label="Ajouter une image"
-        ></v-file-input> -->
+        ></v-file-input>
 
         <v-btn
         :disabled="!valid"
@@ -52,7 +53,8 @@
 
 <script>
 import PostsDataService from "../services/PostsDataService";
-import Header from '../components/Header.vue'
+import Header from '../components/Header.vue';
+import ReturnToPosts from "../components/ReturnToPosts.vue";
 import Logout from "../components/Logout.vue";
 
 
@@ -92,8 +94,8 @@ export default {
         .catch((e) => {
           console.log(e);
         });
-              window.location.reload();
       this.$router.push({ name: "posts" });
+      window.location.reload();
     },
 
     newPost() {
@@ -104,6 +106,7 @@ export default {
   components: {
     Header,
     Logout,
+    ReturnToPosts
   }
 };
 </script>
@@ -119,6 +122,10 @@ export default {
   flex: 1 1 auto;
   max-width: 100%;
   position: relative;
+}
+
+h1 {
+  text-align: center;
 }
 
 .submit-form {
