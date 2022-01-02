@@ -36,6 +36,11 @@ export default new Router({
       path: "/profile/",
       name: "profile",
       component: () => import("./views/Profile")
+    },
+    {
+      path: "/upload/",
+      name: "upload",
+      component: () => import("./views/Upload")
     }
   ]
 });

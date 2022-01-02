@@ -60,7 +60,6 @@ export default {
     font-weight: 800!important;
   }
   &__img {
-    margin: 2.5%;
     object-fit: cover!important;
   }
   &__react {

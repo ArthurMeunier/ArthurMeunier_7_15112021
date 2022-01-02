@@ -95,7 +95,7 @@ export default {
           }
           return;
         });
-      this.$router.push({ name: "posts" });
+      this.$router.push({ name: "login" });
     },
     loginRedirect() {
       this.$router.push({ name: "login" });

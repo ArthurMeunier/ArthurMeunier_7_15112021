@@ -1,7 +1,35 @@
 const express = require("express");
 const cors = require("cors");
+const multer = require("multer");
 
 const app = express();
+
+const fileFilter = function(req, file, cb) {
+  const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+
+
+  if (!allowedTypes.includes(file.mimetype)) {
+    const error = new Error("Wrong file type");
+    error.code = "LIMIT_FILE_TYPES";
+    return cb(error, false);
+  }
+
+
+  cb(null, true);
+};
+
+var path = require('path')
+
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, '../frontend/public/images')
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname)) //Appending extension
+  }
+})
+
+var upload = multer({ storage: storage });
 
 
 var corsOptions = {
@@ -15,7 +43,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const db = require("./models");
-db.sequelize.sync({ alter: false }).then(() => {
+db.sequelize.sync({ alter: true }).then(() => {
   console.log("Drop and re-sync db.");
 });
 
@@ -39,6 +67,23 @@ app.delete("*", (req, res, next) => {
   console.log('DELETE ' + req.url)
   next()
 });
+
+app.post("/upload", upload.single('file'), (req, res) => {
+  res.json({ file: req.file });
+});
+
+app.use(function(err, req, res, next) {
+  if (err.code === "LIMIT_FILE_TYPES") {
+    res.status(422).json({ error: "Only images are allowed" });
+    return;
+  }
+
+  if (err.code === "LIMIT_FILE_SIZE") {
+    res.status(422).json({ error: `Too large. Max size is ${MAX_SIZE / 1000}Kb` });
+    return;
+  }
+
+})
 
 require("./routes/users")(app);
 require("./routes/posts")(app);

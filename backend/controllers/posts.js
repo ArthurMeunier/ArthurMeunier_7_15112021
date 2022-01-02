@@ -14,9 +14,7 @@ exports.createPost = (req, res) => {
     return;
   }
 
-  const token = req.headers.authorization.split(' ')[1];
-  const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
-  userId = decodedToken.userId;
+  const userId = req.userId;
 
 
   // CREATE A POST
@@ -24,7 +22,7 @@ exports.createPost = (req, res) => {
     userId: userId,
     title: req.body.title,
     description: req.body.description,
-    imageURL: req.file ? `${req.protocol}://${req.get('host')}/images/${req.file.filename}` : null
+    imageURL: req.body.imageURL,
   };
 
     // Save Post in the database

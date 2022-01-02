@@ -26,9 +26,7 @@ exports.createComment = (req, res) => {
     return;
   }
 
-  const token = req.headers.authorization.split(' ')[1];
-  const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
-  userId = decodedToken.userId;
+  const userId = req.userId;
 
   // CREATE A COMMENT
   const comment = {
@@ -242,4 +240,20 @@ exports.deleteComment = (req, res, next) => {
       });
     }
   );
+};
+
+
+exports.countComments = (req, res) => {
+  // On lit le post_id dans l'url
+  const postId = req.query.postId
+  // On prépare la requête SQL pour récupérer les commentaires du post
+  const sql = `SELECT COUNT(id) FROM groupomania.comments c WHERE c.postId = ${postId}`;
+  sequelize.query(sql, { type: QueryTypes.SELECT }).then(count =>{
+    res.status(200).json(count);
+    console.log(count);
+  }).catch(err => {
+    res.status(500).json({
+      error: err
+    });
+  })
 };

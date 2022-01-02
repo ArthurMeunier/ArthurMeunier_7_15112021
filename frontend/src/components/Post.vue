@@ -6,14 +6,12 @@
     >
  
     <v-card-title class="posts__title">{{post.title}}</v-card-title>
-    <v-img class="posts__img"
-      height="250"
-      src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
-    ></v-img>
+    <div class="post__image">
+      <img class="post__img"
+       :src="'http://localhost:8081/images/'+ post.imageURL"/>
+    </div>
 
-
-
-    <v-card-text class="posts__description">
+    <v-card-text class="post__description">
 
       <div>{{post.description}}</div>
     </v-card-text>
@@ -86,7 +84,7 @@ export default {
 
 
 
-.posts {
+.post {
   background-color: #fdefef!important;
   max-width: 800px!important;
   width: 800px;
@@ -98,8 +96,14 @@ export default {
   &__title {
     font-weight: 800!important;
   }
+  &__image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
   &__img {
-    margin: 2.5%;
+    max-width: 250px;
+    max-height: 250px;
     object-fit: cover!important;
   }
   &__react {

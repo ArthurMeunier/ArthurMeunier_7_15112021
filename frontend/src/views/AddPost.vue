@@ -1,13 +1,13 @@
 <template>
-<div class="mainAddPost">
+<div class="addpost">
 
   <Header />
   <ReturnToPosts/>
   <h1>Ajouter une publication</h1>
-  <div class="submit-form mt-3 mx-auto">
-    <div v-if="!submitted">
+
       <v-form 
-        @keyup.enter="addPost"
+        @submit.prevent="addPost"
+        enctype="multipart/form-data"
         class="addpost__form"
         ref="form"
         v-model="valid"
@@ -26,10 +26,17 @@
           required
         ></v-text-field>
 
-        <v-file-input
-          accept="image/*"
-          label="Ajouter une image"
-        ></v-file-input>
+        <input
+            type="file"
+            ref="file"
+            class="file-input"
+            @change="selectFile"
+          /> 
+
+         <span v-if="file" class="file-name">{{ file.name }}</span>
+
+
+        <!-- <button class="button is-info">Send</button> -->
 
         <v-btn
         :disabled="!valid"
@@ -40,10 +47,17 @@
         Publier
         </v-btn>
 
-      </v-form>
+        <div v-if="message"
+          :class="`message ${error ? 'is-danger' : 'is-success'}`"
+        >
+    
+        <div class="message-body">{{ message }}</div>
 
     </div>
-  </div>
+    
+
+      </v-form>
+
 
   <Logout />
 
@@ -56,33 +70,40 @@ import PostsDataService from "../services/PostsDataService";
 import Header from '../components/Header.vue';
 import ReturnToPosts from "../components/ReturnToPosts.vue";
 import Logout from "../components/Logout.vue";
+import axios from 'axios';
 
 
 export default {
   name: "addPost",
-  data() {
+  data () {
     return {
+      file: "",
+      message: "",
+      error: false,
       post: {
         id: null,
         userId: "",
         title: "",
         description: "",
-        imageURL: null,
+        imageURL: "",
       },
-      submitted: false,
-    };
+    }
   },
   methods: {
-    validate () {
-      this.$refs.form.validate()
-    },
-    addPost() {
+    // validate () {
+    //   this.$refs.form.validate()
+    // },
+    async addPost() {
+      const response = await this.sendFile();
+      console.log("addpost");    
+
       var data = {
         userId: this.post.userId,
         title: this.post.title,
         description: this.post.description,
-        imageURL: this.post.imageURL,
+        imageURL: response.data.file.filename,
       };
+      console.log(data);
 
 
       PostsDataService.create(data)
@@ -102,6 +123,55 @@ export default {
       this.submitted = false;
       this.post = {};
     },
+
+    selectFile() {
+      const file = this.$refs.file.files[0];
+      const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+      const MAX_SIZE = 10000000;
+      const tooLarge = file.size > MAX_SIZE;
+
+
+      if (allowedTypes.includes(file.type) && !tooLarge) {
+        this.file = this.$refs.file.files[0];
+        this.error = false;
+        this.message = "";
+      } else {
+        this.error = true;
+        this.message = tooLarge ? `Too large. Max size is ${MAX_SIZE / 1000}Kb.` : "Only images are allowed";
+      }
+    },
+
+    async sendFile() {
+      let formData = new FormData();
+      formData.append('file', this.file);
+      console.log("sendfile");
+      console.log(this.file);
+      // console.log(this.file);
+      // console.log(this.file.name);
+      
+      let response = null;
+
+       try {
+        response = await axios.post('http://localhost:8080/upload', formData);
+        console.log(response);
+        // let formData = new FormData();
+        // formData.append('title', this.post.title);
+        // formData.append('description', this.post.description);
+        // formData.append('filename', response.data.file.filename);
+        // this.message = "File has been uploaded";
+        // this.file = "";
+        // this.error = false;
+        // console.log(response);
+        // console.log(response.data.file.filename)
+      } catch(err) {
+        this.message = err.response.data.error;
+        this.error = true;
+        console.log(this.file.filename);
+
+      console.log(err);
+      }
+      return response;
+    }
   },
   components: {
     Header,
@@ -117,11 +187,23 @@ export default {
 @import "../scss/mixins.scss";
 @import "../scss/variables.scss";
 
-.main {
-  @include flexcenter;
-  flex: 1 1 auto;
-  max-width: 100%;
-  position: relative;
+.addpost {
+  &__form {
+    @include flexcenter;
+    margin-top: 2.5%;
+  }
+  &__addbtn {
+    margin-top: 5rem;
+  }
+}
+
+
+.v-input {
+  width: 50%;
+}
+
+.file-input {
+  margin-top: 5%;
 }
 
 h1 {

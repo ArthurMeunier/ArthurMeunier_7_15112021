@@ -5,17 +5,16 @@
     max-width="374"
     >
  
-    <v-card-title class="posts__title">{{post.title}}</v-card-title>
-    <v-img class="posts__img"
-      height="250"
-      src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
-    ></v-img>
+      <v-card-title class="posts__title">{{post.title}}</v-card-title>
+      <div class="posts__img">
+        <img class="posts__img"
+          height="250"
+          :src="'http://localhost:8081/images/'+ post.imageURL"
+        >
+      </div>
 
-
-
-    <v-card-text class="posts__description">
-
-      <div>{{post.description}}</div>
+      <v-card-text class="posts__description">
+        <div>{{post.description}}</div>
     </v-card-text>
 
     <v-divider class="mx-4"></v-divider>
@@ -58,6 +57,7 @@ export default {
       posts: [],
       title: "",
       description: "",
+      imageURL: "",
     };
   },
   methods: {
@@ -71,6 +71,10 @@ export default {
         })
         .catch((e) => {
           console.log(e);
+          if (e.response.status == 401) {
+            sessionStorage.clear();
+            this.$router.push('/login')
+          }
         });
     },
     getPostContent(post) {
@@ -78,6 +82,7 @@ export default {
         id: post.id,
         title: post.title,
         description: post.description,
+        imageURL: post.imageURL,
       };
     },
   },
@@ -98,7 +103,6 @@ export default {
   position: relative;
 }
 
-
 .posts {
   background-color: #fdefef!important;
   max-width: 800px!important;
@@ -112,8 +116,10 @@ export default {
     font-weight: 800!important;
   }
   &__img {
-    margin: 2.5%;
     object-fit: cover!important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   &__react {
     display: flex;
