@@ -33,4 +33,21 @@ header {
 .v-avatar {
   cursor: pointer!important;
 }
+
+@media screen and (max-width: 480px) {
+
+  .logo {
+    width: 11rem;
+  }
+
+}
+
+@media screen and (min-width:481px) and (max-width: 768px) {
+
+  .logo {
+    width: 18rem;
+  }
+
+}
+
 </style>

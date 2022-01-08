@@ -8,10 +8,12 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.INTEGER,
       allowNull: false,
     },
-    islike: {
+    isLike: {
       type: Sequelize.BOOLEAN
     }
   });
+
+  
 
   return Likes;
 };

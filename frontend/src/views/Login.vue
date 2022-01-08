@@ -87,7 +87,7 @@ export default {
 
 .login {
   @include flexcenter;
-  padding: 5%;
+  padding: 2%;
   &__form {
     display: flex;
     flex-direction: column;
@@ -103,4 +103,5 @@ export default {
     margin-top: 2rem;
   }
 }
+
 </style>

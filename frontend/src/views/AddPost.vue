@@ -19,21 +19,28 @@
           required
         ></v-text-field>
 
-        <v-text-field
+        <v-textarea
           v-model="post.description"
           :rules="[(v) => !!v || 'Ce champs est requis']"
           label="Description"
           required
-        ></v-text-field>
+        ></v-textarea>
 
-        <input
+      
+        <!-- <input
             type="file"
             ref="file"
             class="file-input"
             @change="selectFile"
-          /> 
+          >  -->
+          <!-- <v-file-input
+            
+              truncate-length="15"
+          ></v-file-input> -->
 
-         <span v-if="file" class="file-name">{{ file.name }}</span>
+          <v-file-input label="Ajouter une image" ref="file" v-model="file"></v-file-input>
+
+         <!-- <span v-if="file" class="file-name">{{ file.name }}</span> -->
 
 
         <!-- <button class="button is-info">Send</button> -->

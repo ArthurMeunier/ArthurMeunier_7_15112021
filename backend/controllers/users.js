@@ -5,6 +5,7 @@ const sequelize = db.sequelize;
 const Sequelize = require("sequelize");
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
+const { QueryTypes } = require("sequelize");
 
 
 // LOGIN USER (POST)
@@ -77,7 +78,10 @@ exports.createUser = (req, res) => {
 };
 
 // FIND ALL USERS (GET)
-exports.getAllUsers = (req, res, next) => {
+exports.getAllUsers = async (req, res, next) => {
+  const currentUserId = req.userId;
+  const currentUsers = await sequelize.query ("SELECT * FROM users WHERE id=? AND admin=1", {replacements : [currentUserId] , type: QueryTypes.SELECT});
+  if (currentUsers.length == 0) return res.status(401).json({message: 'Accès interdit'});
   Users.findAll().then(
     (users) => {
       res.status(200).json(users);
@@ -150,9 +154,10 @@ exports.updateUser = (req, res, next) => {
 
 // DELETE USER (DESTROY)
 exports.deleteUser = (req, res, next) => {
+  const userId = req.userId;
   Users.destroy({
     where: {
-      id: req.params.id
+      id: userId
     }
   }).then(
     (user) => {
@@ -174,6 +179,20 @@ exports.deleteUser = (req, res, next) => {
 };
 
 
+// exports.deleteUser = async (req, res, next) => {
+//   const currentUserId = req.userId;
+//   const currentUsers = await sequelize.query ("SELECT * FROM users WHERE id=? AND admin=1", {replacements : [currentUserId] , type: QueryTypes.SELECT});
+//   if (currentUsers.length == 0) {
+//      res.status(401).json({message: 'Accès interdit'});
+//      return;
+//   } 
+//   const userId = req.params.id;
+//   deleteUserCascade(userId);
+//   res.send("Ok");
+// };
+
+
+
 exports.getProfile = (req, res) => {
   // On lit le post_id dans l'url
   // const token = req.headers.authorization.split(' ')[1];
@@ -191,12 +210,23 @@ exports.getProfile = (req, res) => {
   })
 };
 
-// exports.getProfile = (req, res) => {
+exports.deleteMe = (req, res) => {
+  const userId = req.userId;
+  deleteUserCascade(userId);
+  res.send("Ok");
+};
+
+async function deleteUserCascade(userId)
+{
+  const users = await sequelize.query ("SELECT * FROM users WHERE id=? AND admin=0", {replacements : [userId] , type: QueryTypes.SELECT});
+  if (users.length == 0) {
+     res.status(404).json({message: 'Utilisateur non trouvé'});
+     return;
+  } 
+  // ** ** ** Effacer les likes du User : DELETE FROM likes WHERE userId=?
+  // ** ** ** Effacer les commentaires du User : DELETE FROM comments WHERE userId=?
+  // ** ** ** Effacer les posts du User : deux chose à faires : lire les posts (Select) ; pour chaque post, effacer les likes du post, effacer les commentaires du post, effacer l'image du post puis après effacer le post
   
-// 	let profile = {
-// 		firstname: "bob",
-// 		lastname: "leponge",
-// 		id: 1
-// 	};
-// 	res.status(200).json(profile);
-// };
+
+
+}

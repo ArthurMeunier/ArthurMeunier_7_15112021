@@ -8,7 +8,7 @@ module.exports = app => {
 
   router.get("/", comments.getAllComments);
 
-  router.get("/count", comments.countComments);
+  router.get("/count", comments.getCommentCount);
 
   router.delete("/:id", auth, comments.deleteComment);
 

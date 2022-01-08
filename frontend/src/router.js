@@ -41,6 +41,11 @@ export default new Router({
       path: "/upload/",
       name: "upload",
       component: () => import("./views/Upload")
+    },
+    {
+      path: "/admin/",
+      name: "admin",
+      component: () => import("./views/Admin")
     }
   ]
 });

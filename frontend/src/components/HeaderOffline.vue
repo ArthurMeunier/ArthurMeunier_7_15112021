@@ -17,4 +17,13 @@ export default {
   align-items: center;
   padding: 1rem;
 }
+
+
+@media screen and (max-width:480px) {
+
+  .logo {
+    width: 14rem;
+  }
+
+}
 </style>

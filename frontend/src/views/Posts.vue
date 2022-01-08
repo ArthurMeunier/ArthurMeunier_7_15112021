@@ -48,7 +48,7 @@ export default {
 
 
 .posts {
-  background-color: #fdefef!important;
+  background-color: $card-color;
   max-width: 800px!important;
   width: 800px;
   border-radius: 20px!important;

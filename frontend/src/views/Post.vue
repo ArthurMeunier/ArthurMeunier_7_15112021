@@ -43,4 +43,10 @@ export default {
 .mainPosts__wrap {
   @include flexcenter;
 }
+
+
+.return {
+  margin-left: 1rem;
+}
+
 </style>

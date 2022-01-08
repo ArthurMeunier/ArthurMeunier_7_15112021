@@ -9,14 +9,17 @@ module.exports = app => {
   router.get("/profile", auth, users.getProfile);
 
   
-  router.get("/", users.getAllUsers);
+  router.get("/", auth, users.getAllUsers);
   router.get("/:id", users.getOneUser);
   
 
 
   router.put("/:id", auth, users.updateUser);
 
-  router.delete("/:id", users.deleteUser);
+  router.delete("/deleteme", auth, users.deleteMe);
+  router.delete("/:id", auth, users.deleteUser);
+
 
   app.use('/api/users', router);
 };
+

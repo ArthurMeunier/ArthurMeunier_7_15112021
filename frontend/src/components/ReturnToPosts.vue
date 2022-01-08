@@ -22,4 +22,6 @@ export default {
   cursor: pointer!important;
 }
 
+
+
 </style>

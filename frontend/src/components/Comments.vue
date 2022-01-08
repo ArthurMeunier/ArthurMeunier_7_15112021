@@ -82,7 +82,7 @@ export default {
 </script>
 
 
-<style lang="scss">
+<style scoped lang="scss">
 @import "../scss/mixins.scss";
 @import "../scss/variables.scss";
 
@@ -93,7 +93,7 @@ export default {
   border-radius: 20px!important;
   @include flexcenter;
   &__comment {
-      background-color: #fdefef!important;
+      background-color: #f8dcdc!important;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -113,4 +113,32 @@ export default {
     margin-left: 1rem;
   }
 }
+
+
+@media screen and (max-width:480px) {
+
+  .comments {
+    width: 17rem;
+  }
+
+}
+
+@media screen and (min-width:481px) and (max-width: 768px) {
+
+  .comments {
+    width: 25rem!important;
+  }
+
+}
+
+@media screen and (min-width:769px) and (max-width: 1024px) {
+
+  .comments {
+    width: 40rem!important;
+  }
+
+
+}
+
+
 </style>

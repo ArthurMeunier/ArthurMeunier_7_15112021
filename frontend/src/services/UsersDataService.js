@@ -30,6 +30,10 @@ class UsersDataService {
     return http.delete(`/users/${id}`);
   }
 
+  deleteme() {
+    return http.delete("/users/deleteme");
+  }
+
   login(email, password) {
     return http.post("/users/login", {
         email: email,

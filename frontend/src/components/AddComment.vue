@@ -2,10 +2,10 @@
   <div class="addcomment">
 
     <v-form 
-    @keyup.enter="addComment"
     class="addcomment__form"
     ref="form"
     v-model="valid"
+    @submit.prevent="addComment"
     >
 
       <v-text-field
@@ -49,7 +49,7 @@ import CommentsDataService from "../services/CommentsDataService";
         validate () {
           this.$refs.form.validate()
       },
-  addComment() {
+        addComment() {
           console.log("addComment");
           // console.log(this.userId + "," + this.$route.params.id );
           CommentsDataService.create({ comment : this.comment, userId: this.userId, postId: this.$route.params.id })
@@ -73,4 +73,30 @@ import CommentsDataService from "../services/CommentsDataService";
     width: 800px;
   }
 }
+
+@media screen and (max-width:480px) {
+
+  .addcomment__form {
+    width: 17rem;
+  }
+
+}
+
+@media screen and (min-width:481px) and (max-width: 768px) {
+
+  .addcomment__form {
+    width: 25rem;
+  }
+
+}
+
+@media screen and (min-width:769px) and (max-width: 1024px) {
+
+  .addcomment__form {
+    width: 40rem;
+  }
+
+
+}
+
 </style>
