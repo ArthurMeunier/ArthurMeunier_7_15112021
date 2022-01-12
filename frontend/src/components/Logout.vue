@@ -1,5 +1,5 @@
 <template>
-    <v-btn fab color="red" @click="logout()" fixed right bottom>
+    <v-btn fab color="red lighten-1" @click="logout()" fixed right bottom>
         <v-icon>mdi-logout</v-icon>
     </v-btn>
 </template>

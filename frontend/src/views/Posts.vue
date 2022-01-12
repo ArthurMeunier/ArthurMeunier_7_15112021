@@ -5,6 +5,10 @@
     <v-btn class="posts__addpost" fab color="primary" @click="addPostRedirect()" fixed left top>
         <v-icon>mdi-plus</v-icon>
     </v-btn>
+
+    <v-btn v-if="isAdmin" class="posts__admin" fab color="green" @click="AdminRedirect()" fixed left bottom>
+        <v-icon class="posts__adminicon">mdi-account-group</v-icon>
+    </v-btn>
    
     <Posts />
 
@@ -18,13 +22,28 @@
 import Header from "../components/Header.vue";
 import Posts from "../components/Posts.vue";
 import Logout from "../components/Logout.vue";
+const isAdmin = sessionStorage.getItem("admin") == "true";
 
 
 export default {
   name: "posts",
+    data() {
+    return {
+      post: [],
+      id: "",
+      title: "",
+      description: "",
+      like:"",
+      countComments: "",
+      isAdmin,
+    };
+  },
   methods: {
     addPostRedirect() {
       this.$router.push("/addPost");
+    },
+    AdminRedirect() {
+      this.$router.push("/admin");
     },
   },
   components: {
@@ -55,6 +74,13 @@ export default {
   &__addpost {
     top: 6rem!important;
     left: 1.5rem!important;
+  }
+  &__admin {
+    width: 2rem!important;
+    height: 2rem!important;
+  }
+  &__adminicon {
+    font-size: 1rem!important;
   }
   &__title {
     font-weight: 800!important;

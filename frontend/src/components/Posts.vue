@@ -4,7 +4,9 @@
     class="mx-auto my-12 posts"
     max-width="374"
     >
+
       <v-card class="posts__top" @click="postRedirect(post.id)">
+
         <div class="posts__header">
           <v-card-title class="posts__title">{{post.title}}</v-card-title>
           <div class="posts__userinfo">
@@ -23,9 +25,7 @@
           >
         </div>
 
-        <v-card-text class="posts__description">
-          <div>{{post.description}}</div>
-        </v-card-text>
+
       </v-card>
 
     <v-divider class="mx-4 divider"></v-divider>
@@ -33,17 +33,13 @@
     <div class="posts__react">
       <div class="posts__reactleft">
           <div class ="posts__reactlike">
-            <v-icon class="posts__reactlikeicon">mdi-thumb-up</v-icon>
-            <div class="posts__reactlikenumber">{{ post.countLikes }}</div>
-          </div>
-          <div class ="posts__reactdislike">
-            <v-icon class="posts__reactdislikeicon">mdi-thumb-down</v-icon>
-            <div class="posts__reactdislikenumber">{{ post.countDislikes }}</div>
-          </div>      
+            <v-icon @click="likePost(post), rotateImage()" id ="myimage" class="posts__reactlikeicon rotate">mdi-thumb-up</v-icon>
+            <div class="posts__reactlikenumber">{{ post.like }}</div>
+          </div>  
       </div>
       <div class="posts__reactright">
         <div class ="posts__reactcomment">
-        <v-icon class="posts__reactcommenticon">mdi-message</v-icon>
+        <v-icon @click="postRedirect(post.id)" class="posts__reactcommenticon">mdi-message</v-icon>
         <div class="posts__reactcommentnumber"> {{ post.countComments }}</div>
         </div>   
       </div>      
@@ -58,7 +54,7 @@
 <script>
 // import axios from "axios";
 import PostsDataService from "../services/PostsDataService";
-
+const isAdmin = sessionStorage.getItem("admin") == "true";
 
 
 export default {
@@ -66,6 +62,7 @@ export default {
   data() {
     return {
       posts: [],
+      isAdmin,
       // title: "",
       // description: "",
       // imageURL: "",
@@ -74,9 +71,39 @@ export default {
   },
 
   methods: {
+
+    
     postRedirect(id) {
       this.$router.push(`/Posts/${id}`);
     },
+
+    deletePost(post) {
+      PostsDataService.delete(post.id)
+      .then((response) => {
+        console.log(response.data);
+        window.location.reload();
+      }).catch((e) => {
+          console.log(e);
+        });
+    },
+
+    likePost(post) {
+
+     const data = {
+        like: post.like += 1
+      }
+
+      PostsDataService.update(post.id, data)
+      .then((response) => {
+        console.log(response.data);
+        // si il existe déjà un objet Like qui a pour user le current_user et pour post celui qui a le poce blo
+        // il faut supprimer cet objet et enlever 1 au post.like 
+        // Sinon, il faut créer cet objet Like et ajouter 1 au post.like
+      }).catch((e) => {
+          console.log(e);
+        });
+    },
+
     getAllPosts() {
       PostsDataService.getAll()
         .then((response) => {
@@ -100,12 +127,17 @@ export default {
         imageURL: post.imageURL,
         countComments: post.countComments,
         countLikes: post.countLikes,
+        like: post.like,
         countDislikes: post.countDislikes,
         userimageURL: post.userimageURL,
         firstname: post.firstname,
         lastname: post.lastname,
       };
     },
+     rotateImage() {
+        var img = document.getElementById('myimage');
+        img.style.transform = 'rotate(45deg)';
+    }
   },
   mounted() {
     this.getAllPosts();
@@ -161,6 +193,8 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
   }
   &__img {
     object-fit: cover!important;
@@ -169,6 +203,7 @@ export default {
     justify-content: center;
     height: 250px;
   }
+
   &__description {
     margin-top: 1rem;
     text-align: center;
@@ -186,7 +221,9 @@ export default {
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-around;
+    justify-content: flex-start;
+    margin-left: 10%;
+
   }
   &__reactlike {
     display:flex;
@@ -194,6 +231,16 @@ export default {
   &__reactlikeicon {
     margin-right: 50%;
   }
+//   &__reactlikeicon:hover {
+//   animation: fill 0.45s ease-in-out;
+//   opacity: 1;
+//   background: radial-gradient(blue, red);
+//   background-clip: text;
+//   -webkit-text-fill-color: transparent;
+//   -webkit-background-clip: text;
+//   font-weight: bold;
+//   cursor: pointer;
+// }
   &__reactdislike {
     display: flex;
   }
@@ -206,10 +253,10 @@ export default {
     flex-direction: row;
     align-items: center;
     justify-content: flex-end;
-    margin-right: 10%;
   }
   &__reactcomment {
     display:flex;
+    margin-right: 10%;
   }
   &__reactcommenticon {
     margin-right: 50%;
@@ -219,6 +266,8 @@ export default {
     margin: 0;
   }
 }
+
+
 
 @media screen and (max-width:480px) {
 

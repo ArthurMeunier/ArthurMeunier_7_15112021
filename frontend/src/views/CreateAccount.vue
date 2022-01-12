@@ -49,6 +49,8 @@
       >
         Créer mon compte
       </v-btn>
+
+      <div class="signup__message" v-if="message">{{ message }}</div>
     </v-form>
 
     <a href="/" class="signup__signin">J'ai déjà un compte</a>
@@ -67,6 +69,7 @@ export default {
       valid: true,
       firstname: '',
       lastname: '',
+      message: "",
       nameRules: [
         v => !!v || 'Ce champ est requis',
       ],
@@ -86,19 +89,25 @@ export default {
     validate () {
       this.$refs.form.validate()
     },
+  
+
     createUser() {
       console.log("createUser");
       UsersDataService.create(this.firstname, this.lastname, this.email, this.password)
         .then((response) => {
-          for (var key in response.data) {
-            this.profile[key] = response.data[key];
+          console.log(response);
+          this.$router.push({ name: "login" });
+          // for (var key in response.data) {
+          //   this.profile[key] = response.data[key];
+          //   this.$router.push({ name: "login" });
+          // return;
+          // }
+        })
+        .catch(() => {
+          {
+            this.message = "Adresse mail déjà utilisée";
           }
-          return;
         });
-      this.$router.push({ name: "login" });
-    },
-    loginRedirect() {
-      this.$router.push({ name: "login" });
     }
   },
   components: {
@@ -125,6 +134,10 @@ export default {
   }
   &__signin {
     margin-top: 4rem;
+  }
+  &__message {
+    color: red;
+    margin-top: 2rem;
   }
 }
 </style>

@@ -51,6 +51,21 @@ db.comments.belongsTo(db.users, {
   onDelete: "CASCADE"
 })
 
+db.users.hasMany(db.likes, {
+  foreignKey: "userId"
+})
+db.likes.belongsTo(db.users, {
+  foreignKey: "userId",
+  onDelete: "CASCADE"
+})
+
+db.posts.hasMany(db.likes, {
+  foreignKey: "postId"
+})
+db.likes.belongsTo(db.posts, {
+  foreignKey: "postId",
+  onDelete: "CASCADE"
+})
 
 
 

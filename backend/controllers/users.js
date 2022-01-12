@@ -6,6 +6,9 @@ const Sequelize = require("sequelize");
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 const { QueryTypes } = require("sequelize");
+const fs = require('fs');
+
+
 
 
 // LOGIN USER (POST)
@@ -29,6 +32,7 @@ exports.loginUser = (req, res) => {
           // if they match
           res.status(200).json({ // return
               userId: user.userId,
+              admin: user.admin,
               token: jwt.sign(
                   { userId: user.id },
                   "RANDOM_TOKEN_SECRET",
@@ -67,6 +71,7 @@ exports.createUser = (req, res) => {
         .catch((error) =>
           res.status(400).json({
             error,
+            message: "Adresse mail déjà utilisée"
           })
         );
     })
@@ -152,44 +157,44 @@ exports.updateUser = (req, res, next) => {
   );
 };
 
-// DELETE USER (DESTROY)
-exports.deleteUser = (req, res, next) => {
-  const userId = req.userId;
-  Users.destroy({
-    where: {
-      id: userId
-    }
-  }).then(
-    (user) => {
-      if (user) {
-        res.status(200).json(user);
-      } else {
-        res.status(404).json({
-          error: "Not found"
-        });
-      }
-    }
-  ).catch(
-    (error) => {
-      res.status(500).json({
-        error: error
-      });
-    }
-  );
-};
-
-
-// exports.deleteUser = async (req, res, next) => {
-//   const currentUserId = req.userId;
-//   const currentUsers = await sequelize.query ("SELECT * FROM users WHERE id=? AND admin=1", {replacements : [currentUserId] , type: QueryTypes.SELECT});
-//   if (currentUsers.length == 0) {
-//      res.status(401).json({message: 'Accès interdit'});
-//      return;
-//   } 
-//   const userId = req.params.id;
-//   deleteUserCascade(userId);
-//   res.send("Ok");
+// // DELETE USER (DESTROY)
+// exports.deleteUser = (req, res, next) => {
+//   const userId = req.userId;
+//   Users.destroy({
+//     where: {
+//       id: userId
+//     }
+//   }).then(
+//     (user) => {
+//       if (user) {
+//         res.status(200).json(user);
+//       } else {
+//         res.status(404).json({
+//           error: "Not found"
+//         });
+//       }
+//     }
+//   ).catch(
+//     (error) => {
+//       res.status(500).json({
+//         error: error
+//       });
+//     }
+//   );
 // };
+
+
+exports.deleteUser = async (req, res, next) => {
+  const currentUserId = req.userId;
+  const currentUsers = await sequelize.query ("SELECT * FROM users WHERE id=? AND admin=1", {replacements : [currentUserId] , type: QueryTypes.SELECT});
+  if (currentUsers.length == 0) {
+     res.status(401).json({message: 'Accès interdit'});
+     return;
+  } 
+  const userId = req.params.id;
+  deleteUserCascade(userId);
+  res.send("Ok");
+};
 
 
 
@@ -210,11 +215,57 @@ exports.getProfile = (req, res) => {
   })
 };
 
-exports.deleteMe = (req, res) => {
+exports.deleteMe = async (req, res) => {
+  console.log("deleteme");
+
   const userId = req.userId;
-  deleteUserCascade(userId);
-  res.send("Ok");
+  const users = await sequelize.query ("SELECT * FROM users WHERE id=? AND admin=0", {replacements : [userId] , type: QueryTypes.SELECT});
+  if (users.length == 0) {
+     res.status(404).json({message: 'Utilisateur non trouvé'});
+     return;
+  }
+  console.log("delete");
+
+  await sequelize.query ("DELETE FROM likes WHERE userId=?", {replacements : [userId] , type: QueryTypes.DELETE});
+  await sequelize.query ("DELETE FROM comments WHERE userId=?", {replacements : [userId] , type: QueryTypes.DELETE});
+
+  const posts = await sequelize.query ("SELECT imageURL FROM posts WHERE userId=?", {replacements : [userId] , type: QueryTypes.SELECT});
+  if (posts.length > 0) {
+    await sequelize.query ("DELETE t1, t2 FROM likes t1 INNER JOIN posts t2 ON t1.postId = t2.id WHERE t2.userId=?", {replacements : [userId] , type: QueryTypes.DELETE});
+    await sequelize.query ("DELETE t1, t2 FROM comments t1 INNER JOIN posts t2 ON t1.postId = t2.id WHERE t2.userId=?", {replacements : [userId] , type: QueryTypes.DELETE});
+    // await sequelize.query ("DELETE FROM comments WHERE userId=?", {replacements : [userId] , type: QueryTypes.DELETE});
+
+    posts.forEach(post => {
+
+      if (fs.existsSync('../frontend/public/images/'+ post.imageURL)) {
+        fs.unlinkSync('../frontend/public/images/'+ post.imageURL);
+      }
+    });
+  }
+  await sequelize.query ("DELETE FROM posts WHERE userId=?", {replacements : [userId] , type: QueryTypes.DELETE});
+  await sequelize.query ("DELETE FROM users WHERE id=?", {replacements : [userId] , type: QueryTypes.DELETE});
+
+  
+
+  // ** ** ** Effacer les posts du User : deux chose à faires : lire les posts (Select) ; pour chaque post, effacer les likes du post, effacer les commentaires du post, effacer l'image du post puis après effacer le post
+  //                                 SELECT * FROM posts where userId=?; DELETE FROM posts WHERE userId=?
+  res.send("ok");
 };
+
+// async function deleteUserCascade(userId)
+// {
+//   const users = await sequelize.query ("SELECT * FROM users WHERE id=? AND admin=0", {replacements : [userId] , type: QueryTypes.SELECT});
+//   if (users.length == 0) {
+//      res.status(404).json({message: 'Utilisateur non trouvé'});
+//      return;
+//   } 
+//   // ** ** ** Effacer les likes du User : DELETE FROM likes WHERE userId=?
+//   // ** ** ** Effacer les commentaires du User : DELETE FROM comments WHERE userId=?
+//   // ** ** ** Effacer les posts du User : deux chose à faires : lire les posts (Select) ; pour chaque post, effacer les likes du post, effacer les commentaires du post, effacer l'image du post puis après effacer le post
+//   //                                 SELECT * FROM posts where userId=?; DELETE FROM posts WHERE userId=?
+
+
+// }
 
 async function deleteUserCascade(userId)
 {
@@ -223,10 +274,14 @@ async function deleteUserCascade(userId)
      res.status(404).json({message: 'Utilisateur non trouvé'});
      return;
   } 
+await sequelize.query ("DELETE FROM likes WHERE userId=?", {replacements : [userId] , type: QueryTypes.DELETE});
+await sequelize.query ("DELETE FROM comments WHERE userId=?", {replacements : [userId] , type: QueryTypes.DELETE});
+await sequelize.query ("DELETE FROM posts WHERE userId=?", {replacements : [userId] , type: QueryTypes.DELETE});
+await sequelize.query ("DELETE FROM users WHERE id=?", {replacements : [userId] , type: QueryTypes.DELETE});
   // ** ** ** Effacer les likes du User : DELETE FROM likes WHERE userId=?
   // ** ** ** Effacer les commentaires du User : DELETE FROM comments WHERE userId=?
   // ** ** ** Effacer les posts du User : deux chose à faires : lire les posts (Select) ; pour chaque post, effacer les likes du post, effacer les commentaires du post, effacer l'image du post puis après effacer le post
-  
+  //                                 SELECT * FROM posts where userId=?; DELETE FROM posts WHERE userId=?
 
 
 }

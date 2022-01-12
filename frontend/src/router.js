@@ -38,11 +38,6 @@ export default new Router({
       component: () => import("./views/Profile")
     },
     {
-      path: "/upload/",
-      name: "upload",
-      component: () => import("./views/Upload")
-    },
-    {
       path: "/admin/",
       name: "admin",
       component: () => import("./views/Admin")

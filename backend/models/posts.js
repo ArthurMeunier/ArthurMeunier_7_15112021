@@ -15,8 +15,12 @@ module.exports = (sequelize, Sequelize) => {
     imageURL: {
       type: Sequelize.STRING(255),
       allowNull: true,  
-    }
-  });
+    },
+    like: {
+      type: Sequelize.INTEGER,
+      allowNull: true,
+      defaultValue: 0 
+    }  });
 
   return Posts;
 };

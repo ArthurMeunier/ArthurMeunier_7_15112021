@@ -57,8 +57,11 @@ export default {
           .login(this.email, this.password)
           .then((response) => {
             let responseToken = response.data.token;
+            let responseAdmin = response.data.admin;
             sessionStorage.setItem("token", responseToken);
-            this.$router.push("/Posts");
+            sessionStorage.setItem("admin", responseAdmin);
+            // this.$router.push("/Posts");
+            window.location.href="/Posts";
           })
           .catch(() => {
             {

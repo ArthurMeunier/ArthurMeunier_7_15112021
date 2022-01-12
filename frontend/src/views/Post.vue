@@ -1,8 +1,9 @@
 <template>
   <div class="mainPosts">
     <Header />
-    <ReturnToPosts />
+
     <div class="mainPosts__wrap">
+      <ReturnToPosts />
       <Post />
       <Comments />
       <AddComment />

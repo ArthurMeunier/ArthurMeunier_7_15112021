@@ -19,6 +19,11 @@ export default {
 
 .v-main {
   font-family: 'Rajdhani', sans-serif;
+  background-color: tan;
+}
+
+h1 {
+  margin-top: 5rem;
 }
 
 </style>

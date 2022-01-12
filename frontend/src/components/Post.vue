@@ -4,9 +4,19 @@
     class="mx-auto my-12 posts"
     max-width="374"
     >
- 
-    <v-card-title class="posts__title">{{post.title}}</v-card-title>
-    <div class="posts__image">
+        <div class="posts__header">
+          <v-card-title class="posts__title">{{post.title}}</v-card-title>
+          <div class="posts__userinfo">
+            <v-avatar
+              class="posts__avatar"
+              @click="toProfile()"
+              color="secondary"
+              size="24"
+            ></v-avatar>
+            <div class="posts__user">{{post.firstname}} {{post.lastname}}</div>
+          </div>
+        </div>
+            <div class="posts__image">
       <img class="posts__img"
        :src="'http://localhost:8081/images/'+ post.imageURL"/>
     </div>
@@ -16,18 +26,18 @@
       <div>{{post.description}}</div>
     </v-card-text>
 
+      <div class="posts__delete" v-if="isAdmin">
+        <v-icon class="posts__deleteicon" @click="deletePost(post)">mdi-delete</v-icon>
+      </div>
+
     <v-divider class="mx-4 divider"></v-divider>
 
     <div class="posts__react">
       <div class="posts__reactleft">
           <div class ="posts__reactlike">
-            <v-icon class="posts__reactlikeicon">mdi-thumb-up</v-icon>
-            <div class="posts__reactlikenumber">{{ post.countLikes }}</div>
+            <v-icon @click="likePost(post)" class="posts__reactlikeicon">mdi-thumb-up</v-icon>
+            <div class="posts__reactlikenumber">{{ post.like }}</div>
           </div>
-          <div class ="posts__reactdislike">
-            <v-icon class="posts__reactdislikeicon">mdi-thumb-down</v-icon>
-            <div class="posts__reactdislikenumber">{{ post.countDislikes }}</div>
-          </div>      
       </div>
       <div class="posts__reactright">
         <div class ="posts__reactcomment">
@@ -46,6 +56,7 @@
 
 <script>
 import PostsDataService from "../services/PostsDataService";
+const isAdmin = sessionStorage.getItem("admin") == "true";
 
 export default {
   name: "post",
@@ -55,7 +66,9 @@ export default {
       id: "",
       title: "",
       description: "",
+      like:"",
       countComments: "",
+      isAdmin,
     };
   },
   methods: {
@@ -68,6 +81,18 @@ export default {
         .catch((e) => {
           console.log(e);
         });
+    },
+
+    deletePost(post) {
+      if(confirm("Voulez-vous vraiment supprimer votre compte ? Cette action est définitive.")) {
+      PostsDataService.delete(post.id)
+      .then((response) => {
+        console.log(response.data);
+        this.$router.push('/posts')
+      }).catch((e) => {
+          console.log(e);
+        });
+      }
     },
   },
   mounted() {
@@ -94,6 +119,22 @@ export default {
     top: 6rem!important;
     left: 1.5rem!important;
   }
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  &__userinfo {
+    padding: 16px;
+    display: flex;
+    align-items: center;
+  }
+  &__user {
+    font-weight: 500;
+  }
+  &__avatar {
+    margin-right: 0.5rem;
+  }
   &__title {
     font-weight: 800!important;
   }
@@ -107,6 +148,22 @@ export default {
     max-height: 250px;
     object-fit: cover!important;
   }
+    &__description {
+    margin-top: 1rem;
+    text-align: center;
+    font-weight: 600;
+  }
+  &__delete {
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  &__deleteicon {
+    color: red;
+    border: 1px solid red;
+    border-radius: 15px;
+  }
   &__react {
     display: flex;
     flex-direction: row;
@@ -119,7 +176,8 @@ export default {
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-around;
+    justify-content: flex-start;
+    margin-left: 10%;
   }
   &__reactlike {
     display:flex;
@@ -139,10 +197,10 @@ export default {
     flex-direction: row;
     align-items: center;
     justify-content: flex-end;
-    margin-right: 10%;
   }
   &__reactcomment {
     display:flex;
+    margin-right: 10%;
   }
   &__reactcommenticon {
     margin-right: 50%;

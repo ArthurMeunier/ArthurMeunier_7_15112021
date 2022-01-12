@@ -27,22 +27,28 @@
         ></v-textarea>
 
       
-        <!-- <input
-            type="file"
-            ref="file"
-            class="file-input"
-            @change="selectFile"
-          >  -->
+
+      
+          <input
+              type="file"
+              ref="file"
+              id="file-input"
+              @change="selectFile"
+              style="display: none;"
+              v-on:change="updatePreview"
+            > 
           <!-- <v-file-input
             
               truncate-length="15"
           ></v-file-input> -->
 
-          <v-file-input label="Ajouter une image" ref="file" v-model="file"></v-file-input>
+          <!-- <v-file-input label="Ajouter une image" ref="file" v-model="file"></v-file-input> -->
 
          <!-- <span v-if="file" class="file-name">{{ file.name }}</span> -->
 
+    
 
+        <img v-bind:src="imagePreview" class="addpost__preview" v-on:click="openUpload">
         <!-- <button class="button is-info">Send</button> -->
 
         <v-btn
@@ -86,6 +92,7 @@ export default {
     return {
       file: "",
       message: "",
+      imagePreview: 'http://localhost:8081/images/img.png',
       error: false,
       post: {
         id: null,
@@ -97,9 +104,8 @@ export default {
     }
   },
   methods: {
-    // validate () {
-    //   this.$refs.form.validate()
-    // },
+
+
     async addPost() {
       const response = await this.sendFile();
       console.log("addpost");    
@@ -153,23 +159,12 @@ export default {
       formData.append('file', this.file);
       console.log("sendfile");
       console.log(this.file);
-      // console.log(this.file);
-      // console.log(this.file.name);
       
       let response = null;
 
        try {
         response = await axios.post('http://localhost:8080/upload', formData);
         console.log(response);
-        // let formData = new FormData();
-        // formData.append('title', this.post.title);
-        // formData.append('description', this.post.description);
-        // formData.append('filename', response.data.file.filename);
-        // this.message = "File has been uploaded";
-        // this.file = "";
-        // this.error = false;
-        // console.log(response);
-        // console.log(response.data.file.filename)
       } catch(err) {
         this.message = err.response.data.error;
         this.error = true;
@@ -178,7 +173,27 @@ export default {
       console.log(err);
       }
       return response;
-    }
+    },
+    openUpload() {
+      document.getElementById('file-input').click()
+    },
+
+    updatePreview (e) {
+        console.log('e', e)
+        var reader, files = e.target.files
+        if (files.length === 0) {
+          console.log('Empty')
+        }
+        reader = new FileReader();
+        reader.onload = (e) => {
+          this.imagePreview = e.target.result
+        }
+        reader.readAsDataURL(files[0])
+      }
+
+
+    
+
   },
   components: {
     Header,
@@ -199,8 +214,12 @@ export default {
     @include flexcenter;
     margin-top: 2.5%;
   }
+  &__preview {
+    height: 100px;
+    cursor: pointer;
+  }
   &__addbtn {
-    margin-top: 5rem;
+    margin-top: 2rem;
   }
 }
 

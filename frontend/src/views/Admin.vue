@@ -65,10 +65,10 @@ export default {
       };
     },
 
-    deleteUser(id) {
+    deleteUser(userId) {
       console.log("deleteUser");
-      console.log(id);
-      UsersDataService.delete(id)
+      console.log(userId);
+      UsersDataService.delete(userId)
         .then((response) => {
           console.log("thendeleteUser");
           console.log(response.status);

@@ -11,7 +11,7 @@ module.exports = (sequelize, Sequelize) => {
     email: {
       type: Sequelize.STRING(255),
       allowNull: false,
-      unique: true
+      unique: true,
     },
     password: {
       type: Sequelize.STRING,
@@ -21,7 +21,8 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.STRING(255),
     },
     admin: {
-      type: Sequelize.BOOLEAN
+      type: Sequelize.BOOLEAN,
+      defaultValue: false,
     }
   });
 

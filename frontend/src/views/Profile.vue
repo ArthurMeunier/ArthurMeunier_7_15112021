@@ -10,13 +10,19 @@
         class="profile__avatar"
         color="secondary"
         size="110"
-    >
+        v-bind:src="imagePreview"
+        v-on:click="openUpload">
       <!-- <img
         src="http://localhost:8081/images/1641305703123.png"
       > -->
-    <v-file-input
-  truncate-length="15"
-    ></v-file-input>
+        <input
+            type="file"
+            ref="file"
+            id="file-input"
+            @change="selectFile"
+            style="display: none;"
+            v-on:change="updatePreview"
+          > 
 
     </v-avatar>
     <v-card class="profile__card">
@@ -25,9 +31,9 @@
     </v-card>
 
     <v-btn
-    color="red"
+    color="red lighten-1"
     class="profile__deletebtn"
-    @click="deleteUser(id)"
+    @click="deleteUser()"
     >
     Supprimer mon compte 
     </v-btn>
@@ -44,12 +50,14 @@ import Header from "../components/Header.vue";
 import ReturnToPosts from "../components/ReturnToPosts.vue";
 import Logout from "../components/Logout.vue";
 import UsersDataService from "../services/UsersDataService";
+import axios from 'axios';
 
 export default {
   name: "profile",
   data() {
     return {
       user: {},
+      imagePreview: 'http://localhost:8081/images/img.png',
     };
   },
   methods: {
@@ -75,11 +83,13 @@ export default {
     deleteUser() {
       console.log("deleteUser");
       console.log();
-      UsersDataService.delete()
+      if(confirm("Voulez-vous vraiment supprimer votre compte ? Cette action est définitive.")) {
+      UsersDataService.deleteme()
         .then((response) => {
           console.log("thendeleteUser");
           console.log(response.status);
           this.user = response.data[0]; 
+          this.$router.push('/login')
         })
         .catch((e) => {
           console.log(e);
@@ -90,7 +100,67 @@ export default {
           }
           // console.error;
         });
+      }
     },
+
+    
+        openUpload() {
+      document.getElementById('file-input').click()
+    },
+
+        updatePreview (e) {
+        console.log('e', e)
+        var reader, files = e.target.files
+        if (files.length === 0) {
+          console.log('Empty')
+        }
+        reader = new FileReader();
+        reader.onload = (e) => {
+          this.imagePreview = e.target.result
+        }
+        reader.readAsDataURL(files[0])
+      },
+
+          selectFile() {
+      const file = this.$refs.file.files[0];
+      const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+      const MAX_SIZE = 10000000;
+      const tooLarge = file.size > MAX_SIZE;
+
+
+      if (allowedTypes.includes(file.type) && !tooLarge) {
+        this.file = this.$refs.file.files[0];
+        this.error = false;
+        this.message = "";
+      } else {
+        this.error = true;
+        this.message = tooLarge ? `Too large. Max size is ${MAX_SIZE / 1000}Kb.` : "Only images are allowed";
+      }
+    },
+
+    async sendFile() {
+      let formData = new FormData();
+      formData.append('file', this.file);
+      console.log("sendfile");
+      console.log(this.file);
+      
+      let response = null;
+
+       try {
+        response = await axios.post('http://localhost:8080/upload', formData);
+        console.log(response);
+      } catch(err) {
+        this.message = err.response.data.error;
+        this.error = true;
+        console.log(this.file.filename);
+
+      console.log(err);
+      }
+      return response;
+    },
+
+      
+
   },
   mounted() {
     this.getProfile();
@@ -113,7 +183,7 @@ export default {
   flex-direction: column;
   align-items: center;
   &__avatar {
-    margin-top: 4rem;
+    margin-top: 1rem;
   }
   &__card {
     background-color: $card-color;

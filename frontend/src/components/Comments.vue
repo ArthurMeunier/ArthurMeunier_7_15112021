@@ -11,11 +11,14 @@
           color="secondary"
           size="24"
         ></v-avatar>
-        <div class ="comments__user"> {{comment.firstname}} {{comment.lastname}} {{renderDate(comment.createdAt)}} </div>
+        <div class ="comments__user"> {{comment.firstname}} {{comment.id}} {{comment.lastname}} - <span class="comments__date">{{renderDate(comment.createdAt)}}</span> </div>
       </div>
 
       <div class="comments__content">{{comment.comment}}</div>
 
+      <div class="comments__delete" v-if="isAdmin">
+        <v-icon class="comments__deleteicon" @click="deleteComment(comment.id)">mdi-delete</v-icon>
+      </div>
 
 
   </v-card>
@@ -26,7 +29,7 @@
 <script>
 // import axios from "axios";
 import CommentsDataService from "../services/CommentsDataService";
-
+const isAdmin = sessionStorage.getItem("admin") == "true";
 
 
 export default {
@@ -34,10 +37,12 @@ export default {
   data() {
     return {
       comments: [],
+      id: "",
       comment: "",
       firstname: "",
       lastname: "",
       createdAt: "",
+      isAdmin,
     };
   },
   methods: {
@@ -58,6 +63,18 @@ export default {
         lastname: comment.lastname,
         createdAt: comment.createdAt,
       };
+    },
+
+    deleteComment(comment) {
+      if(confirm("Voulez-vous vraiment supprimer ce commentaire ?")) {
+      CommentsDataService.delete(comment)
+      .then((response) => {
+        console.log(response.data);
+        window.location.reload();
+      }).catch((e) => {
+          console.log(e);
+        });
+      }
     },
     
     renderDate(str)
@@ -109,8 +126,25 @@ export default {
   &__user {
     margin-left: 1rem;
   }
+  &__date {
+    font-style: italic;
+    font-size: 0.9rem;
+  }
   &__content {
     margin-left: 1rem;
+  }
+  &__delete {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+  }
+  &__deleteicon {
+    font-size: 1rem;
+    color: red;
+    border: 1px solid red;
+    border-radius: 15px;
   }
 }
 

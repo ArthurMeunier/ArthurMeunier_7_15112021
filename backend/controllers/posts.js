@@ -24,7 +24,7 @@ exports.createPost = (req, res) => {
     userId: userId,
     title: req.body.title,
     description: req.body.description,
-    imageURL: req.body.imageURL,
+    imageURL: req.body.imageURL
   };
 
     // Save Post in the database
@@ -65,12 +65,10 @@ exports.createPost = (req, res) => {
 //   );
 // };
 
-// GET ALL POSTS 
-
 
 exports.getAllPosts = async (req, res, next) => {
 
-  const sql = `SELECT a.*, b.firstname, b.lastname, b.imageURL AS userimageURL, IFNULL(c.countComments,0) AS countComments,
+  const sql = `SELECT a.*, a.like, b.firstname, b.lastname, b.imageURL AS userimageURL, IFNULL(c.countComments,0) AS countComments,
   IFNULL(d.countLikes,0) AS countLikes,
   IFNULL(e.countDislikes,0) AS countDislikes
   FROM posts a
@@ -86,6 +84,7 @@ exports.getAllPosts = async (req, res, next) => {
 
 
 };
+
 
 exports.getOnePost = async (req, res, next) => {
 
@@ -136,6 +135,7 @@ exports.getOnePost = async (req, res, next) => {
 
 
 // UPDATE POST
+
 exports.updatePost = (req, res, next) => {
   Posts.findOne({
     where: {
