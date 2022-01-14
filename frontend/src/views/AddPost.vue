@@ -4,72 +4,61 @@
   <Header />
   <ReturnToPosts/>
   <h1>Ajouter une publication</h1>
+    <div class="addpost__wrap">
+      <v-card class="addpost__card">
+        <v-form 
+          @submit.prevent="addPost"
+          enctype="multipart/form-data"
+          class="addpost__form"
+          ref="form"
+          v-model="valid"
+          >
+          <v-text-field
+            v-model="post.title"
+            :rules="[(v) => !!v || 'Ce champs est requis']"
+            label="Titre"
+            required
+          ></v-text-field>
 
-      <v-form 
-        @submit.prevent="addPost"
-        enctype="multipart/form-data"
-        class="addpost__form"
-        ref="form"
-        v-model="valid"
-        >
-        <v-text-field
-          v-model="post.title"
-          :rules="[(v) => !!v || 'Ce champs est requis']"
-          label="Titre"
-          required
-        ></v-text-field>
+          <v-textarea
+            v-model="post.description"
+            :rules="[(v) => !!v || 'Ce champs est requis']"
+            label="Description"
+            required
+          ></v-textarea>
 
-        <v-textarea
-          v-model="post.description"
-          :rules="[(v) => !!v || 'Ce champs est requis']"
-          label="Description"
-          required
-        ></v-textarea>
+            <input
+                type="file"
+                ref="file"
+                id="file-input"
+                @change="selectFile"
+                style="display: none;"
+                v-on:change="updatePreview"
+              > 
+      
+        <div v-on:click="openUpload" id="addpost__text">AJOUTER UNE IMAGE</div>
+          <img v-bind:src="imagePreview"  v-on:click="openUpload" id="addpost__preview" >
+          <v-btn
+          :disabled="!valid"
+          color="primary"
+          class="addpost__addbtn"
+          @click="addPost"
+          >
+          Publier
+          </v-btn>
 
+          <div v-if="message"
+            :class="`message ${error ? 'is-danger' : 'is-success'}`"
+          >
+      
+          <div class="message-body">{{ message }}</div>
+
+      </div>
       
 
-      
-          <input
-              type="file"
-              ref="file"
-              id="file-input"
-              @change="selectFile"
-              style="display: none;"
-              v-on:change="updatePreview"
-            > 
-          <!-- <v-file-input
-            
-              truncate-length="15"
-          ></v-file-input> -->
-
-          <!-- <v-file-input label="Ajouter une image" ref="file" v-model="file"></v-file-input> -->
-
-         <!-- <span v-if="file" class="file-name">{{ file.name }}</span> -->
-
-    
-
-        <img v-bind:src="imagePreview" class="addpost__preview" v-on:click="openUpload">
-        <!-- <button class="button is-info">Send</button> -->
-
-        <v-btn
-        :disabled="!valid"
-        color="primary"
-        class="addpost__addbtn"
-        @click="addPost"
-        >
-        Publier
-        </v-btn>
-
-        <div v-if="message"
-          :class="`message ${error ? 'is-danger' : 'is-success'}`"
-        >
-    
-        <div class="message-body">{{ message }}</div>
-
+        </v-form>
+      </v-card>
     </div>
-    
-
-      </v-form>
 
 
   <Logout />
@@ -92,7 +81,7 @@ export default {
     return {
       file: "",
       message: "",
-      imagePreview: 'http://localhost:8081/images/img.png',
+      imagePreview: '',
       error: false,
       post: {
         id: null,
@@ -179,6 +168,7 @@ export default {
     },
 
     updatePreview (e) {
+        document.getElementById("addpost__preview").style.display = 'block';
         console.log('e', e)
         var reader, files = e.target.files
         if (files.length === 0) {
@@ -186,7 +176,9 @@ export default {
         }
         reader = new FileReader();
         reader.onload = (e) => {
-          this.imagePreview = e.target.result
+          this.imagePreview = e.target.result;
+          document.getElementById('addpost__text').style.display = 'none';
+
         }
         reader.readAsDataURL(files[0])
       }
@@ -210,22 +202,48 @@ export default {
 @import "../scss/variables.scss";
 
 .addpost {
+  &__wrap {
+    display:flex;
+    justify-content: center;
+  }
+  &__card {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    background-color: $card-color;  
+    width: 35rem;
+  }
   &__form {
     @include flexcenter;
     margin-top: 2.5%;
-  }
-  &__preview {
-    height: 100px;
-    cursor: pointer;
+    width: 35rem!important;
   }
   &__addbtn {
-    margin-top: 2rem;
+    margin: 2rem 0rem 1rem 0rem;
   }
 }
 
+#addpost__preview {
+  height: 100px;
+  display:none;
+  cursor: pointer;
+}
+
+#addpost__text {
+  background-color: whitesmoke!important;
+  border: 2px dashed black;
+  height: 5rem;
+  text-align: center;
+  align-items: center;
+  display: flex;
+  padding: 5%;
+  font-style: italic;
+  font-weight: bold;
+  cursor: pointer;
+}
 
 .v-input {
-  width: 50%;
+  width: 75%;
 }
 
 .file-input {
@@ -240,4 +258,33 @@ h1 {
   max-width: 300px;
 }
 
+@media screen and (max-width:480px) {
+
+  .addpost__card {
+    width: 16rem!important;
+  }
+
+  .addpost__form {
+    width: 16rem!important;
+  }
+
+}
+
+@media screen and (min-width:481px) and (max-width: 768px) {
+
+  .addpost__card {
+    width: 26rem!important;
+  }
+
+  .addpost__form {
+    width: 26rem!important;
+  }
+
+}
+
+@media screen and (min-width:769px) and (max-width: 1024px) {
+
+
+
+}
 </style>

@@ -137,6 +137,9 @@ exports.updateUser = (req, res, next) => {
         for (var key in req.body) {
           user[key] = req.body[key]
         }
+        console.log(req.params.id);
+        console.log(req.body);
+        console.log("TESTTEST")
         user.save()
           .then((user) => res.status(200).json(user))
           .catch((error) => res.status(500).json({
@@ -156,6 +159,33 @@ exports.updateUser = (req, res, next) => {
     }
   );
 };
+
+// exports.updateUser = (req, res) => {
+//   const id = req.params.id;
+
+//   console.log("HELLOTEST");
+//   console.log(req.params.id);
+//   console.log(req.body);
+//   Users.update(req.body, {
+//     where: { id: id }
+//   })
+//     .then(num => {
+//       if (num == 1) {
+//         res.send({
+//           message: "User was updated successfully."
+//         });
+//       } else {
+//         res.send({
+//           message: `Cannot update Tutorial with id=${id}. Maybe Tutorial was not found or req.body is empty!`
+//         });
+//       }
+//     })
+//     .catch(err => {
+//       res.status(500).send({
+//         message: "Error updating Tutorial with id=" + id
+//       });
+//     });
+// };
 
 // // DELETE USER (DESTROY)
 // exports.deleteUser = (req, res, next) => {
@@ -205,7 +235,7 @@ exports.getProfile = (req, res) => {
   // const userId = decodedToken.userId;
   const userId = req.userId;
   // On prépare la requête SQL pour récupérer les commentaires du post
-  const sql = `SELECT u.firstname, u.lastname, u.email FROM groupomania.users u WHERE u.id = ${userId}`
+  const sql = `SELECT u.id, u.firstname, u.lastname, u.email, u.imageURL FROM groupomania.users u WHERE u.id = ${userId}`
   sequelize.query(sql, { type: Sequelize.QueryTypes.SELECT }).then(profile =>{
     res.status(200).json(profile);
   }).catch(err => {

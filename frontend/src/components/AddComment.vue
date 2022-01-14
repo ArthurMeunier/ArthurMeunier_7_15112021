@@ -71,6 +71,7 @@ import CommentsDataService from "../services/CommentsDataService";
     align-items: center;
     justify-content: center;
     width: 800px;
+    width: 35rem!important;
   }
 }
 

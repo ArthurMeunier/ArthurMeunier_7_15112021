@@ -4,55 +4,55 @@
   <HeaderOffline />
 
   <div class="signup">
+    <v-card class="signup__wrap">
+      <v-form 
+      @keyup.enter="createUser"
+      class="signup__form"
+      ref="form"
+      v-model="valid"
+      >
+        <v-text-field
+          v-model="firstname"
+          :rules="nameRules"
+          label="Prénom"
+          required
+        ></v-text-field>
 
-    <v-form 
-    @keyup.enter="createUser"
-    class="signup__form"
-    ref="form"
-    v-model="valid"
-    >
-      <v-text-field
-        v-model="firstname"
-        :rules="nameRules"
-        label="Prénom"
-        required
-      ></v-text-field>
+          <v-text-field
+          v-model="lastname"
+          :rules="nameRules"
+          label="Nom"
+          required
+        ></v-text-field>
+
 
         <v-text-field
-        v-model="lastname"
-        :rules="nameRules"
-        label="Nom"
-        required
-      ></v-text-field>
+          v-model="email"
+          :rules="emailRules"
+          label="Email"
+          required
+        ></v-text-field>
 
+        <v-text-field
+          v-model="password"
+          type="password"
+          :rules="[rules.required, rules.min]"
+          label="Mot de passe"
+          hint="Au moins 2 caractères"
+        ></v-text-field>
 
-      <v-text-field
-        v-model="email"
-        :rules="emailRules"
-        label="Email"
-        required
-      ></v-text-field>
+        <v-btn
+          :disabled="!valid"
+          color="success"
+          class="signup__signupbtn"
+          @click="createUser"
+        >
+          Créer mon compte
+        </v-btn>
 
-      <v-text-field
-        v-model="password"
-        type="password"
-        :rules="[rules.required, rules.min]"
-        label="Mot de passe"
-        hint="Au moins 2 caractères"
-      ></v-text-field>
-
-      <v-btn
-        :disabled="!valid"
-        color="success"
-        class="signup__signupbtn"
-        @click="createUser"
-      >
-        Créer mon compte
-      </v-btn>
-
-      <div class="signup__message" v-if="message">{{ message }}</div>
-    </v-form>
-
+        <div class="signup__message" v-if="message">{{ message }}</div>
+      </v-form>
+    </v-card>
     <a href="/" class="signup__signin">J'ai déjà un compte</a>
 
   </div>
@@ -72,16 +72,17 @@ export default {
       message: "",
       nameRules: [
         v => !!v || 'Ce champ est requis',
+        v => (v && v.length <= 10) || '10 caractères maximum',
       ],
       email: '',
       emailRules: [
         v => !!v || 'Ce champ est requis',
-        v => /.+@.+\..+/.test(v) || `L'email doit être valide`,
+        v => /[^()[\]{}*&^%$#@!]+/.test(v) || `L'email doit être valide`,
       ],
       password: '',
         rules: {
           required: value => !!value || 'Ce champ est requis',
-          min: v => v.length >= 2 || 'Min 2 characters'
+          min: v => v.length >= 2 || '8 caractères minimum'
         },
     }),
 
@@ -128,7 +129,13 @@ export default {
 
 .signup {
   margin-top: 3rem;
-  @include flexcenter;
+    @include flexcenter;
+  &__wrap {
+    @include flexcenter;
+    background-color: $card-color;
+    padding: 5%;
+    width: 35rem;
+  }
   &__signupbtn {
     margin-top: 1.5rem;
   }

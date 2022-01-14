@@ -6,37 +6,64 @@
   <ReturnToPosts/>
   <h1>Mon compte</h1>
   <div class= "profile">
-    <v-avatar
-        class="profile__avatar"
-        color="secondary"
-        size="110"
-        v-bind:src="imagePreview"
-        v-on:click="openUpload">
-      <!-- <img
-        src="http://localhost:8081/images/1641305703123.png"
-      > -->
-        <input
-            type="file"
-            ref="file"
-            id="file-input"
-            @change="selectFile"
-            style="display: none;"
-            v-on:change="updatePreview"
-          > 
+    <v-card class="profile__wrap">
+      <v-form 
+        @submit.prevent="updateProfile"
+        enctype="multipart/form-data"
+        class="profile__form"
+        ref="form"
+        v-model="valid"
+      >
+        <div class="profile__picture">
+          <v-avatar
+              class="profile__avatar"
+              size="110"
 
-    </v-avatar>
-    <v-card class="profile__card">
-      <div class="profile__name">{{ user.firstname }} {{ user.lastname }}</div>
-      <div class="profile__email">{{ user.email }}</div>
+              >
+            <!-- <img
+              src="http://localhost:8081/images/1641305703123.png"
+            > -->
+
+              <img 
+                class="profile__image"
+                v-on:click="openUpload" 
+                :src="'http://localhost:8081/images/'+ user.imageURL"
+                alt="Avatar"
+              >
+              <input
+                  type="file"
+                  ref="file"
+                  id="file-input"
+                  @change="selectFile"
+                  style="display: none;"
+                  v-on:change="updatePreview"
+                > 
+
+          </v-avatar>
+        </div>
+        <div class="profile__info">
+          <div class="profile__name">{{ user.firstname }} {{ user.lastname }}</div>
+          <div class="profile__email">{{ user.email }}</div>
+        </div>
+
+          <v-btn
+        :disabled="!valid"
+        color="primary"
+        class="profile__savebtn"
+        @click="updateProfile"
+        >
+        Enregistrer
+        </v-btn>
+      </v-form>
     </v-card>
 
-    <v-btn
-    color="red lighten-1"
-    class="profile__deletebtn"
-    @click="deleteUser()"
-    >
-    Supprimer mon compte 
-    </v-btn>
+      <v-btn
+      color="red lighten-1"
+      class="profile__deletebtn"
+      @click="deleteUser()"
+      >
+      Supprimer mon compte 
+      </v-btn>
   </div>
   <Logout />
 </div>
@@ -56,8 +83,11 @@ export default {
   name: "profile",
   data() {
     return {
-      user: {},
-      imagePreview: 'http://localhost:8081/images/img.png',
+        user: {
+        imageURL: ""
+      },
+      valid: "",
+      imagePreview: '',
     };
   },
   methods: {
@@ -68,6 +98,8 @@ export default {
           console.log("then");
           console.log(response.status);
           this.user = response.data[0]; 
+          console.log(response.data)
+          console.log(response.data[0].id)
         })
         .catch((e) => {
           console.log(e);
@@ -78,6 +110,38 @@ export default {
           }
           // console.error;
         });
+    },
+
+    async updateProfile() {
+      const response = await this.sendFile();
+      console.log("updateProfile");    
+
+      var data = {
+        imageURL: response.data.file.filename,
+      };
+      console.log(data);
+
+      
+      UsersDataService.update(this.user.id, data)
+        .then((response) => {
+          this.user.id = response.data.id;
+          console.log("inUpdate")
+          console.log(response.data);
+          console.log(data);
+          console.log(data.imageURL);
+          this.user.imageURL = data.imageURL;
+          console.log(response.data);
+          this.submitted = true;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+      // window.location.reload();
+    },
+
+    newUser() {
+      this.submitted = false;
+      this.user = {};
     },
 
     deleteUser() {
@@ -104,11 +168,11 @@ export default {
     },
 
     
-        openUpload() {
+    openUpload() {
       document.getElementById('file-input').click()
     },
 
-        updatePreview (e) {
+    updatePreview (e) {
         console.log('e', e)
         var reader, files = e.target.files
         if (files.length === 0) {
@@ -121,7 +185,7 @@ export default {
         reader.readAsDataURL(files[0])
       },
 
-          selectFile() {
+    selectFile() {
       const file = this.$refs.file.files[0];
       const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
       const MAX_SIZE = 10000000;
@@ -179,18 +243,37 @@ export default {
 @import "../scss/variables.scss";
 
 .profile{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  &__wrap {
+    background-color: $card-color;
+    width: 35rem;
+  }
+  @include flexcenter;
+  &__form {
+  @include flexcenter;
+  }
+  &__picture {
+    display: flex;
+    justify-content: center;
+  }
   &__avatar {
     margin-top: 1rem;
   }
-  &__card {
+  &__image {
+    border: 2px solid black;
+    width: unset!important;
+  }
+  &__info {
     background-color: $card-color;
     margin-top: 2rem;
-    width: 25%;
     text-align: center;
     font-weight: bold;
+  }
+  &__email {
+    font-weight: 500;
+  }
+  &__savebtn {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
   }
   &__deletebtn {
     margin-top: 4rem;
@@ -208,20 +291,37 @@ h1 {
 
 @media screen and (max-width:480px) {
 
+  .profile__wrap {
+    width: 15rem;
+  }
+
   .profile__card {
     width: 15rem;
   }
 
 }
 
-@media screen and (min-width:481px)  {
+@media screen and (min-width:481px) and (max-width: 768px) {
+
+  .profile__wrap {
+    width: 20rem;
+  }
 
   .profile__card {
-    width: 25rem;
+    width: 20rem;
   }
+
 }
 
+@media screen and (min-width:769px) and (max-width: 1024px) {
 
+  .profile__wrap {
+    width: 35rem;
+  }
 
+  .profile__card {
+    width: 35rem;
+  }
+}
 </style>
 

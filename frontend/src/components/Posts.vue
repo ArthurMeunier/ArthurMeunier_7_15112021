@@ -13,9 +13,15 @@
             <v-avatar
               class="posts__avatar"
               @click="toProfile()"
-              color="secondary"
               size="24"
-            ></v-avatar>
+            >
+              <img
+                class="posts__avatarimg"
+                alt="Avatar"
+                :src="'http://localhost:8081/images/'+ post.userimageURL"
+              >
+            
+            </v-avatar>
             <div class="posts__user">{{post.firstname}} {{post.lastname}}</div>
           </div>
         </div>
@@ -28,12 +34,11 @@
 
       </v-card>
 
-    <v-divider class="mx-4 divider"></v-divider>
 
     <div class="posts__react">
       <div class="posts__reactleft">
           <div class ="posts__reactlike">
-            <v-icon @click="likePost(post), rotateImage()" id ="myimage" class="posts__reactlikeicon rotate">mdi-thumb-up</v-icon>
+            <v-icon @click="likePost(post)" id ="myimage" class="posts__reactlikeicon rotate">mdi-thumb-up</v-icon>
             <div class="posts__reactlikenumber">{{ post.like }}</div>
           </div>  
       </div>
@@ -134,10 +139,10 @@ export default {
         lastname: post.lastname,
       };
     },
-     rotateImage() {
-        var img = document.getElementById('myimage');
-        img.style.transform = 'rotate(45deg)';
-    }
+    //  rotateImage() {
+    //     var img = document.getElementById('myimage');
+    //     img.style.transform = 'rotate(360deg)';
+    // }
   },
   mounted() {
     this.getAllPosts();
@@ -157,7 +162,7 @@ export default {
 }
 
 .posts {
-  background-color: #fdefef!important;
+  background-color: $card-color;
   max-width: 800px!important;
   width: 800px;
   border-radius: 20px!important;
@@ -166,8 +171,8 @@ export default {
     left: 1.5rem!important;
   }
   &__top {
+    background-color: #ece5d4!important;
     cursor: pointer;
-    background-color: #fdefef!important;
     box-shadow: none!important;;
   }
   &__header {
@@ -186,6 +191,9 @@ export default {
   &__avatar {
     margin-right: 0.5rem;
   }
+  &__avatarimg {
+    border: 1px solid black;
+  }
   &__title {
     font-weight: 800!important;
   }
@@ -193,7 +201,6 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 1rem;
     margin-bottom: 1rem;
   }
   &__img {
@@ -210,6 +217,12 @@ export default {
     font-weight: 600;
   }
   &__react {
+    border-top: 4px solid $border-color;
+    border-bottom: 2px solid $border-color;
+    border-left: 2px solid $border-color;
+    border-right: 2px solid $border-color;
+
+  background-color: $subcard-color;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
@@ -223,29 +236,16 @@ export default {
     align-items: center;
     justify-content: flex-start;
     margin-left: 10%;
-
   }
   &__reactlike {
     display:flex;
   }
   &__reactlikeicon {
     margin-right: 50%;
+    color: $icon-color;
   }
-//   &__reactlikeicon:hover {
-//   animation: fill 0.45s ease-in-out;
-//   opacity: 1;
-//   background: radial-gradient(blue, red);
-//   background-clip: text;
-//   -webkit-text-fill-color: transparent;
-//   -webkit-background-clip: text;
-//   font-weight: bold;
-//   cursor: pointer;
-// }
-  &__reactdislike {
-    display: flex;
-  }
-  &__reactdislikeicon {
-    margin-right: 50%;
+  &__reactlikenumber {
+    font-weight: bold;
   }
   &__reactright {
     width: 50%;
@@ -259,11 +259,8 @@ export default {
     margin-right: 10%;
   }
   &__reactcommenticon {
+    color: $icon-color;
     margin-right: 50%;
-  }
-
-  .divider {
-    margin: 0;
   }
 }
 
@@ -279,6 +276,9 @@ export default {
     &__img {
       height: 125px;
     }
+    &__user {
+      font-size: 0.8rem;
+    }
     &__userinfo {
       width: 7rem!important;
     }
@@ -292,6 +292,9 @@ export default {
     width: 25rem!important;
     &__title {
       font-size: 1rem;
+    }
+    &__user {
+      font-size: 0.9rem;
     }
     &__img {
       height: 175px;

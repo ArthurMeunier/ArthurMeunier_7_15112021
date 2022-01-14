@@ -19,6 +19,7 @@ module.exports = (sequelize, Sequelize) => {
     },
     imageURL: {
       type: Sequelize.STRING(255),
+      defaultValue: "default.jpg"
     },
     admin: {
       type: Sequelize.BOOLEAN,

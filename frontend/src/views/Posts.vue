@@ -2,16 +2,16 @@
   <div class="mainPosts">
     <Header />
 
-    <v-btn class="posts__addpost" fab color="primary" @click="addPostRedirect()" fixed left top>
-        <v-icon>mdi-plus</v-icon>
+    <v-btn class="posts__addpost" fab @click="addPostRedirect()" fixed left top>
+        <v-icon class="posts__addposticon">mdi-plus</v-icon>
     </v-btn>
 
     <v-btn v-if="isAdmin" class="posts__admin" fab color="green" @click="AdminRedirect()" fixed left bottom>
         <v-icon class="posts__adminicon">mdi-account-group</v-icon>
     </v-btn>
-   
-    <Posts />
-
+    <transition name="fade">
+      <Posts />
+    </transition>
     <Logout />
   </div>
 </template>
@@ -59,6 +59,13 @@ export default {
 @import "../scss/mixins.scss";
 @import "../scss/variables.scss";
 
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
+
 .mainPosts {
   flex: 1 1 auto;
   max-width: 100%;
@@ -72,8 +79,14 @@ export default {
   width: 800px;
   border-radius: 20px!important;
   &__addpost {
+    background-color: $subcard-color;
     top: 6rem!important;
     left: 1.5rem!important;
+  }
+  &__addposticon {
+    border: 5px solid $card-color;
+    border-radius: 25px;
+    padding: 1.5rem;
   }
   &__admin {
     width: 2rem!important;
@@ -130,4 +143,19 @@ export default {
   }
 
 }
+
+@media screen and (max-width:480px) {
+
+  .posts__addpost {
+    top: 5rem!important;
+    left: 1.2rem!important;
+    height: 2rem!important;
+    width: 2rem!important;
+  }
+  .posts__addposticon {
+      border: 0;
+      padding: 1rem;
+    }
+}
+
 </style>

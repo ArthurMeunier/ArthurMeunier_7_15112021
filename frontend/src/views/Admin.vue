@@ -68,6 +68,7 @@ export default {
     deleteUser(userId) {
       console.log("deleteUser");
       console.log(userId);
+      if(confirm("Voulez-vous vraiment supprimer cet utilisateur ?"))
       UsersDataService.delete(userId)
         .then((response) => {
           console.log("thendeleteUser");
@@ -103,6 +104,7 @@ export default {
 }
 
 .users {
+  background-color: $card-color;
   width: 15rem;
   display: flex!important;
   justify-content: space-between;

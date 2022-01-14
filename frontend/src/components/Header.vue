@@ -3,21 +3,59 @@
     <a href="/Posts" class="logo"><v-img src="../assets/logo_groupo.png" width="300px"> </v-img></a>
     <v-avatar
       @click="toProfile()"
-      color="secondary"
       size="56"
-    ></v-avatar>
+    >
+    
+      <img
+        class="profile__avatarimg"
+        alt="Avatar"
+        :src="'http://localhost:8081/images/'+ user.imageURL"
+      >
+    
+    </v-avatar>
   </header>
 </template>
 
 <script>
-
+import UsersDataService from "../services/UsersDataService";
 
 export default {
   name: "Header",
+    data() {
+    return {
+        user: {
+        imageURL: ""
+      },
+    };
+  },
   methods: {
     toProfile() {
       this.$router.push('/Profile');
+    },
+
+        getProfile() {
+      console.log("getProfile");
+      UsersDataService.myprofile()
+        .then((response) => {
+          console.log("then");
+          console.log(response.status);
+          this.user = response.data[0]; 
+          console.log(response.data)
+          console.log(response.data[0].id)
+        })
+        .catch((e) => {
+          console.log(e);
+          console.log(e.response.status);
+          if (e.response.status == 401) {
+            sessionStorage.clear();
+            this.$router.push('/login')
+          }
+          // console.error;
+        });
     }
+  },
+  beforeMount() {
+      this.getProfile();
   },
 };
 </script>
@@ -34,10 +72,14 @@ header {
   cursor: pointer!important;
 }
 
+.profile__avatarimg {
+  border: 1px solid black;
+}
+
 @media screen and (max-width: 480px) {
 
   .logo {
-    width: 11rem;
+    width: 13rem;
   }
 
 }

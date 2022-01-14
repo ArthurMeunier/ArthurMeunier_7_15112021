@@ -3,30 +3,34 @@
     <HeaderOffline />
 
     <div class="login">
-      <v-form class="login__form">
-        <v-text-field
-          v-model="email"
-          label="Email"
-          @keyup.enter="loginUser"
-        ></v-text-field>
+      <v-card class="login__card">
+        <v-form class="login__form">
+          <v-text-field
+            v-model="email"
+            label="Email"
+            @keyup.enter="loginUser"
+          ></v-text-field>
 
-        <v-text-field
-          v-model="password"
-          label="Mot de passe"
-          type="password"
-          @keyup.enter="loginUser"
-        ></v-text-field>
+          <v-text-field
+            v-model="password"
+            label="Mot de passe"
+            type="password"
+            @keyup.enter="loginUser"
+          ></v-text-field>
 
-        <v-btn class="login__signinbtn" @click="loginUser" color="primary">
-          Connexion
-        </v-btn>
+          <v-btn class="login__signinbtn" @click="loginUser" color="primary">
+            Connexion
+          </v-btn>
 
-        <div class="login__message" v-if="message">{{ message }}</div>
-      </v-form>
+          <div class="login__message" v-if="message">{{ message }}</div>
 
-      <v-btn class="login__signupbtn" @click="createAccountRedirect()">
-        Créer un compte
-      </v-btn>
+                 <v-btn class="login__signupbtn" @click="createAccountRedirect()">
+          Créer un compte
+          </v-btn>
+        </v-form>
+   
+      </v-card>
+
     </div>
   </div>
 </template>
@@ -91,6 +95,11 @@ export default {
 .login {
   @include flexcenter;
   padding: 2%;
+  &__card {
+    background-color: $card-color;
+    padding: 5%;
+    width: 35rem;
+  }
   &__form {
     display: flex;
     flex-direction: column;
@@ -105,6 +114,32 @@ export default {
     color: red;
     margin-top: 2rem;
   }
+}
+
+@media screen and (max-width:480px) {
+
+  .login__card {
+    width: 15rem;
+  }
+
+}
+
+@media screen and (min-width:481px) and (max-width: 768px) {
+
+  .login__card {
+    width: 25rem;
+  }
+
+
+}
+
+@media screen and (min-width:769px) and (max-width: 1024px) {
+
+  .login__card {
+    width: 30rem;
+  }
+
+
 }
 
 </style>

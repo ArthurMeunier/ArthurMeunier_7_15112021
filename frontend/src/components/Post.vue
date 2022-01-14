@@ -10,9 +10,16 @@
             <v-avatar
               class="posts__avatar"
               @click="toProfile()"
-              color="secondary"
               size="24"
-            ></v-avatar>
+            >
+              <img
+                class="posts__avatarimg"
+                alt="Avatar"
+                :src="'http://localhost:8081/images/'+ post.userimageURL"
+              >
+            
+            
+            </v-avatar>
             <div class="posts__user">{{post.firstname}} {{post.lastname}}</div>
           </div>
         </div>
@@ -29,8 +36,6 @@
       <div class="posts__delete" v-if="isAdmin">
         <v-icon class="posts__deleteicon" @click="deletePost(post)">mdi-delete</v-icon>
       </div>
-
-    <v-divider class="mx-4 divider"></v-divider>
 
     <div class="posts__react">
       <div class="posts__reactleft">
@@ -84,7 +89,7 @@ export default {
     },
 
     deletePost(post) {
-      if(confirm("Voulez-vous vraiment supprimer votre compte ? Cette action est définitive.")) {
+      if(confirm("Voulez-vous vraiment supprimer cette publication ?")) {
       PostsDataService.delete(post.id)
       .then((response) => {
         console.log(response.data);
@@ -111,7 +116,7 @@ export default {
 
 
 .posts {
-  background-color: #fdefef!important;
+  background-color: $card-color;
   max-width: 800px!important;
   width: 800px;
   border-radius: 20px!important;
@@ -134,6 +139,9 @@ export default {
   }
   &__avatar {
     margin-right: 0.5rem;
+  }
+  &__avatarimg {
+    border: 1px solid black;
   }
   &__title {
     font-weight: 800!important;
@@ -160,16 +168,21 @@ export default {
     margin-bottom: 0.5rem;
   }
   &__deleteicon {
-    color: red;
-    border: 1px solid red;
+    color: black;
+    border: 1px solid black;
     border-radius: 15px;
   }
   &__react {
+    background-color: $subcard-color;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
     padding: 2%;
+    border-top: 4px solid $border-color;
+    border-bottom: 2px solid $border-color;
+    border-left: 2px solid $border-color;
+    border-right: 2px solid $border-color;
   }
   &__reactleft {
     width: 50%;
@@ -183,6 +196,7 @@ export default {
     display:flex;
   }
   &__reactlikeicon {
+    color: $icon-color;
     margin-right: 50%;
   }
   &__reactdislike {
@@ -203,11 +217,8 @@ export default {
     margin-right: 10%;
   }
   &__reactcommenticon {
+    color: $icon-color;
     margin-right: 50%;
-  }
-  
-  .divider {
-    margin: 0;
   }
 }
 
@@ -216,7 +227,10 @@ export default {
   .posts {
     width: 17rem!important;
     &__img {
-      height: 150px;
+      height: 100px;
+    }
+    &__description {
+      margin-top: 0;
     }
   }
 
@@ -230,7 +244,7 @@ export default {
       font-size: 1rem;
     }
     &__img {
-      height: 175px;
+      height: 150px;
     }
   }
 
@@ -244,7 +258,7 @@ export default {
       font-size: 1rem;
     }
     &__img {
-      height: 225px;
+      height: 150px;
     }
   }
 

@@ -8,10 +8,17 @@
         <v-avatar
           class="comments__avatar"
           @click="toProfile()"
-          color="secondary"
           size="24"
-        ></v-avatar>
-        <div class ="comments__user"> {{comment.firstname}} {{comment.id}} {{comment.lastname}} - <span class="comments__date">{{renderDate(comment.createdAt)}}</span> </div>
+        >
+        
+          <img
+            class="comments__avatarimg"
+            alt="Avatar"
+            :src="'http://localhost:8081/images/'+ comment.imageURL"
+          >
+
+        </v-avatar>
+        <div class ="comments__user"> {{comment.firstname}} {{comment.lastname}} <span class="comments__date">{{renderDate(comment.createdAt)}} :</span> </div>
       </div>
 
       <div class="comments__content">{{comment.comment}}</div>
@@ -41,6 +48,7 @@ export default {
       comment: "",
       firstname: "",
       lastname: "",
+      imageURL: "",
       createdAt: "",
       isAdmin,
     };
@@ -61,6 +69,7 @@ export default {
         comment: comment.comment,
         firstname: comment.firstname,
         lastname: comment.lastname,
+        imageURL: comment.imageURL,
         createdAt: comment.createdAt,
       };
     },
@@ -110,7 +119,8 @@ export default {
   border-radius: 20px!important;
   @include flexcenter;
   &__comment {
-      background-color: #f8dcdc!important;
+    background-color: $comment-color;
+    width: 35rem!important;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -124,9 +134,14 @@ export default {
     margin-bottom: 1rem;
   }
   &__user {
-    margin-left: 1rem;
+    margin-left: 0.5rem;
+    font-weight: 500;
+  }
+  &__avatarimg {
+    border: 1px solid black;
   }
   &__date {
+    font-weight: 400;
     font-style: italic;
     font-size: 0.9rem;
   }
@@ -142,8 +157,8 @@ export default {
   }
   &__deleteicon {
     font-size: 1rem;
-    color: red;
-    border: 1px solid red;
+    color: black;
+    border: 1px solid black;
     border-radius: 15px;
   }
 }

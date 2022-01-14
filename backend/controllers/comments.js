@@ -57,7 +57,7 @@ exports.getAllComments = (req, res) => {
   // On lit le post_id dans l'url
   const postId = req.query.postId
   // On prépare la requête SQL pour récupérer les commentaires du post
-  const sql = `SELECT c.id, c.comment, u.firstname, u.lastname, c.createdAt FROM groupomania.comments c INNER JOIN groupomania.posts p ON c.postId = p.id INNER JOIN groupomania.users u ON c.userId = u.id WHERE p.id = ${postId} ORDER BY c.createdAt ASC`;
+  const sql = `SELECT c.id, c.comment, u.firstname, u.lastname, u.imageURL, c.createdAt FROM groupomania.comments c INNER JOIN groupomania.posts p ON c.postId = p.id INNER JOIN groupomania.users u ON c.userId = u.id WHERE p.id = ${postId} ORDER BY c.createdAt ASC`;
   sequelize.query(sql, { type: QueryTypes.SELECT }).then(comments =>{
     res.status(200).json(comments);
   }).catch(err => {
