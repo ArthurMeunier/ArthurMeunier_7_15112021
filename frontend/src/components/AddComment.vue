@@ -78,7 +78,7 @@ import CommentsDataService from "../services/CommentsDataService";
 @media screen and (max-width:480px) {
 
   .addcomment__form {
-    width: 17rem;
+    width: 17rem!important;
   }
 
 }
@@ -86,7 +86,7 @@ import CommentsDataService from "../services/CommentsDataService";
 @media screen and (min-width:481px) and (max-width: 768px) {
 
   .addcomment__form {
-    width: 25rem;
+    width: 25rem!important;
   }
 
 }

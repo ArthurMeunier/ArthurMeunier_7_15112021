@@ -26,6 +26,7 @@ h1 {
   margin-top: 5rem;
 }
 
+
 .v-avatar img {
   width: unset!important;
 }

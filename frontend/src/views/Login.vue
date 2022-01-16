@@ -116,6 +116,7 @@ export default {
   }
 }
 
+
 @media screen and (max-width:480px) {
 
   .login__card {

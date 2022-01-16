@@ -7,7 +7,6 @@
       <div class="comments__info">
         <v-avatar
           class="comments__avatar"
-          @click="toProfile()"
           size="24"
         >
         
@@ -168,6 +167,7 @@ export default {
 
   .comments {
     width: 17rem;
+    font-size: 12px;
   }
 
 }

@@ -68,12 +68,13 @@ header {
   padding: 1rem;
 }
 
-.v-avatar {
-  cursor: pointer!important;
-}
+
+
+
 
 .profile__avatarimg {
   border: 1px solid black;
+  cursor: pointer!important;
 }
 
 @media screen and (max-width: 480px) {

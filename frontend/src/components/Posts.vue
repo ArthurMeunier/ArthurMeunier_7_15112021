@@ -12,10 +12,9 @@
           <div class="posts__userinfo">
             <v-avatar
               class="posts__avatar"
-              @click="toProfile()"
               size="24"
             >
-              <img
+              <img 
                 class="posts__avatarimg"
                 alt="Avatar"
                 :src="'http://localhost:8081/images/'+ post.userimageURL"
@@ -26,7 +25,7 @@
           </div>
         </div>
         <div class="posts__image">
-          <img class="posts__img"
+          <img v-if="post.imageURL != null" class="posts__img"
             :src="'http://localhost:8081/images/'+ post.imageURL"
           >
         </div>
@@ -76,7 +75,6 @@ export default {
   },
 
   methods: {
-
     
     postRedirect(id) {
       this.$router.push(`/Posts/${id}`);
@@ -209,6 +207,7 @@ export default {
     align-items: center;
     justify-content: center;
     height: 250px;
+    border-radius: 24px;
   }
 
   &__description {

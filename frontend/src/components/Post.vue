@@ -9,7 +9,6 @@
           <div class="posts__userinfo">
             <v-avatar
               class="posts__avatar"
-              @click="toProfile()"
               size="24"
             >
               <img
@@ -24,7 +23,7 @@
           </div>
         </div>
             <div class="posts__image">
-      <img class="posts__img"
+      <img  v-if="post.imageURL != null" class="posts__img"
        :src="'http://localhost:8081/images/'+ post.imageURL"/>
     </div>
 
@@ -152,9 +151,12 @@ export default {
     justify-content: center;
   }
   &__img {
-    max-width: 250px;
-    max-height: 250px;
-    object-fit: cover!important;
+object-fit: cover !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 250px;
+    border-radius: 24px;
   }
     &__description {
     margin-top: 1rem;
@@ -211,6 +213,7 @@ export default {
     flex-direction: row;
     align-items: center;
     justify-content: flex-end;
+    margin-right: 10%;
   }
   &__reactcomment {
     display:flex;

@@ -10,10 +10,26 @@
         class="users"
         max-width="374"
       >
-        <div class="users__user">{{user.firstname}} {{user.lastname}}</div>
-        <v-icon @click="deleteUser(user.id)" class="users__deleteicon">mdi-delete</v-icon>
+        <v-avatar
+          class="users__avatar"
+          size="24"
+        >
         
+          <img
+            class="users__avatarimg"
+            alt="Avatar"
+            :src="'http://localhost:8081/images/'+ user.imageURL"
+          >
+
+        </v-avatar>
+          <div class="users__user">{{user.firstname}} {{user.lastname}}</div>
+          <div class="users__delete">
+            <v-icon @click="deleteUser(user.id)" class="users__deleteicon">mdi-delete</v-icon>
+          </div>
+        
+
     </v-card>
+    <div class="users__message" v-if="message">{{ message }}</div>
 
     </div>
     <Logout />
@@ -32,6 +48,7 @@ export default {
   name: "users",
     data() {
     return {
+      message: "",
       users: [],
     };
   },
@@ -66,24 +83,22 @@ export default {
     },
 
     deleteUser(userId) {
-      console.log("deleteUser");
-      console.log(userId);
       if(confirm("Voulez-vous vraiment supprimer cet utilisateur ?"))
       UsersDataService.delete(userId)
         .then((response) => {
-          console.log("thendeleteUser");
           console.log(response.status);
           this.user = response.data[0]; 
-          window.location.reload();
+            window.location.reload();
         })
         .catch((e) => {
-          console.log(e);
           console.log(e.response.status);
           if (e.response.status == 401) {
             sessionStorage.clear();
             this.$router.push('/login')
           }
-          // console.error;
+          if (e.response.status == 404) {
+             this.message = "Impossible de supprimer cet utilisateur";
+          }
         });
     },
   },
@@ -106,12 +121,28 @@ export default {
 .users {
   background-color: $card-color;
   width: 15rem;
-  display: flex!important;
   justify-content: space-between;
+  display: flex!important;
+  align-items: center!important;
   margin-top: 1rem;
   padding: 1rem;
+  &__avatarimg {
+    border: 1px solid black;
+  }
+  &__delete {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-right: 1rem;
+  }
   &__deleteicon {
-    color: red!important;
+    color: black;
+    border: 1px solid black;
+    border-radius: 15px;
+  }
+  &__message {
+    color: red;
+    margin-top: 2rem;
   }
 }
 

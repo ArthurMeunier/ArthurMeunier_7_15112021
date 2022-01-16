@@ -32,6 +32,3 @@ const jwt = require('jsonwebtoken');
 //     }
 //   );
 // };
-
-
-

@@ -83,6 +83,7 @@ export default {
       message: "",
       imagePreview: '',
       error: false,
+      valid: true,
       post: {
         id: null,
         userId: "",
@@ -97,13 +98,17 @@ export default {
 
     async addPost() {
       const response = await this.sendFile();
+      let imageURL = null;
+      if (response != null) {
+        imageURL = response.data.file.filename;
+      }
       console.log("addpost");    
 
       var data = {
         userId: this.post.userId,
         title: this.post.title,
         description: this.post.description,
-        imageURL: response.data.file.filename,
+        imageURL: imageURL,
       };
       console.log(data);
 
@@ -144,6 +149,10 @@ export default {
     },
 
     async sendFile() {
+
+      if (this.file == "") {
+        return null;
+      }
       let formData = new FormData();
       formData.append('file', this.file);
       console.log("sendfile");

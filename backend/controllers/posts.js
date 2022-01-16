@@ -5,6 +5,7 @@ const sequelize = db.sequelize;
 const { QueryTypes } = require("sequelize");
 const jwt = require('jsonwebtoken');
 const { countComments } = require("../services/comments.services");
+const fs = require('fs');
 
 // CREATE AND SAVE NEW POST
 exports.createPost = (req, res) => {
@@ -192,3 +193,29 @@ exports.deletePost = (req, res, next) => {
     }
   );
 };
+
+// // Supprimer un post par l'utilisateur
+// exports.deletePost = (req, res) => {
+//   const id = req.params.id;
+//   const userId = req.body.userId;
+
+//   Posts.findOne({ where: { id: id } })
+//       .then(post => {
+//           // Si le post a une image, supprimer l'image du dossier '/images' et supprimer le post
+//               // Sinon supprimer le post directement
+//           if (post.imageURL) {
+//               const filename = post.imageURL.split('/images/')[1];
+//               fs.unlink(`../frontend/public/images/${filename}`, () => {
+//                   Posts.destroy({ where: { id: id }})
+//                       .then(() => res.status(200).json({ message: 'Post supprimé avec succès' }))
+//                       .catch(error => res.status(400).json({ message: 'Impossible de supprimer ce post', error }));
+//               })
+//           } else {
+//               Posts.destroy({ where: { id: id }})
+//                   .then(() => res.status(200).json({ message: 'Post supprimé avec succès' }))
+//                   .catch(error => res.status(400).json({ message: 'Impossible de supprimer ce post', error }));
+//           }
+//       })
+//       .catch(error => res.status(500).json({ error }))
+// }
+

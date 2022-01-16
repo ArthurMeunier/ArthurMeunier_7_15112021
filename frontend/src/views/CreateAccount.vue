@@ -147,4 +147,30 @@ export default {
     margin-top: 2rem;
   }
 }
+
+@media screen and (max-width:480px) {
+
+  .signup__wrap {
+    width: 15rem;
+  }
+
+}
+
+@media screen and (min-width:481px) and (max-width: 768px) {
+
+  .signup__wrap {
+    width: 25rem;
+  }
+
+
+}
+
+@media screen and (min-width:769px) and (max-width: 1024px) {
+
+  .signup__wrap {
+    width: 30rem;
+  }
+
+
+}
 </style>

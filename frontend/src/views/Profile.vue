@@ -31,6 +31,7 @@
                 alt="Avatar"
               >
               <input
+                  
                   type="file"
                   ref="file"
                   id="file-input"
@@ -46,8 +47,8 @@
           <div class="profile__email">{{ user.email }}</div>
         </div>
 
-          <v-btn
-        :disabled="!valid"
+        <v-btn
+        :disabled="!hasFile"
         color="primary"
         class="profile__savebtn"
         @click="updateProfile"
@@ -86,11 +87,16 @@ export default {
         user: {
         imageURL: ""
       },
-      valid: "",
-      imagePreview: '',
+      valid: true,
+      hasFile: false,
+      imagePreview: 'http://localhost:8081/images/'+ this.imageURL
     };
   },
   methods: {
+    validate () {
+      this.$refs.form.validate()
+    },
+
     getProfile() {
       console.log("getProfile");
       UsersDataService.myprofile()
@@ -136,7 +142,7 @@ export default {
         .catch((e) => {
           console.log(e);
         });
-      // window.location.reload();
+      window.location.reload();
     },
 
     newUser() {
@@ -186,6 +192,7 @@ export default {
       },
 
     selectFile() {
+      this.hasFile = true;
       const file = this.$refs.file.files[0];
       const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
       const MAX_SIZE = 10000000;
@@ -261,6 +268,7 @@ export default {
   &__image {
     border: 2px solid black;
     width: unset!important;
+    cursor: pointer!important;
   }
   &__info {
     background-color: $card-color;
