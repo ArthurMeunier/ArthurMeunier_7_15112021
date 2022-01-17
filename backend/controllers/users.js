@@ -1,15 +1,11 @@
 const db = require("../models");
 const Users = db.users;
-const Op = db.Sequelize.Op;
 const sequelize = db.sequelize;
 const Sequelize = require("sequelize");
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 const { QueryTypes } = require("sequelize");
 const fs = require('fs');
-
-
-
 
 // LOGIN USER (POST)
 exports.loginUser = (req, res) => {
@@ -39,7 +35,6 @@ exports.loginUser = (req, res) => {
                   { expiresIn: '24h' }
               )
           });
-          console.log(user.id);
       })
       .catch(error => res.status(500).json({ error }));
   })
@@ -125,6 +120,20 @@ exports.getOneUser = (req, res, next) => {
   );
 };
 
+// GET PROFILE (GET)
+exports.getProfile = (req, res) => {
+  const userId = req.userId;
+  // On prépare la requête SQL pour récupérer les commentaires du post
+  const sql = `SELECT u.id, u.firstname, u.lastname, u.email, u.imageURL FROM groupomania.users u WHERE u.id = ${userId}`
+  sequelize.query(sql, { type: Sequelize.QueryTypes.SELECT }).then(profile =>{
+    res.status(200).json(profile);
+  }).catch(err => {
+    res.status(500).json({
+      error: err
+    });
+  })
+};
+
 // UPDATE USER (PUT)
 exports.updateUser = (req, res, next) => {
   Users.findOne({
@@ -162,60 +171,7 @@ exports.updateUser = (req, res, next) => {
   );
 };
 
-// exports.updateUser = (req, res) => {
-//   const id = req.params.id;
-
-//   console.log("HELLOTEST");
-//   console.log(req.params.id);
-//   console.log(req.body);
-//   Users.update(req.body, {
-//     where: { id: id }
-//   })
-//     .then(num => {
-//       if (num == 1) {
-//         res.send({
-//           message: "User was updated successfully."
-//         });
-//       } else {
-//         res.send({
-//           message: `Cannot update Tutorial with id=${id}. Maybe Tutorial was not found or req.body is empty!`
-//         });
-//       }
-//     })
-//     .catch(err => {
-//       res.status(500).send({
-//         message: "Error updating Tutorial with id=" + id
-//       });
-//     });
-// };
-
-// // DELETE USER (DESTROY)
-// exports.deleteUser = (req, res, next) => {
-//   const userId = req.userId;
-//   Users.destroy({
-//     where: {
-//       id: userId
-//     }
-//   }).then(
-//     (user) => {
-//       if (user) {
-//         res.status(200).json(user);
-//       } else {
-//         res.status(404).json({
-//           error: "Not found"
-//         });
-//       }
-//     }
-//   ).catch(
-//     (error) => {
-//       res.status(500).json({
-//         error: error
-//       });
-//     }
-//   );
-// };
-
-
+// DELETE USER (DELETE)
 exports.deleteUser = async (req, res, next) => {
   const currentUserId = req.userId;
   const currentUsers = await sequelize.query ("SELECT * FROM users WHERE id=? AND admin=1", {replacements : [currentUserId] , type: QueryTypes.SELECT});
@@ -234,26 +190,8 @@ exports.deleteUser = async (req, res, next) => {
 };
 
 
-
-exports.getProfile = (req, res) => {
-  // On lit le post_id dans l'url
-  // const token = req.headers.authorization.split(' ')[1];
-  // const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
-  // const userId = decodedToken.userId;
-  const userId = req.userId;
-  // On prépare la requête SQL pour récupérer les commentaires du post
-  const sql = `SELECT u.id, u.firstname, u.lastname, u.email, u.imageURL FROM groupomania.users u WHERE u.id = ${userId}`
-  sequelize.query(sql, { type: Sequelize.QueryTypes.SELECT }).then(profile =>{
-    res.status(200).json(profile);
-  }).catch(err => {
-    res.status(500).json({
-      error: err
-    });
-  })
-};
-
+// DELETE ME
 exports.deleteMe = async (req, res) => {
-
   const userId = req.userId;
   if (await deleteUserCascade(userId)) {
     res.send("Ok");
@@ -262,21 +200,6 @@ exports.deleteMe = async (req, res) => {
     res.status(404).json({message: 'Utilisateur non trouvé'});
   }
 };
-
-// async function deleteUserCascade(userId)
-// {
-//   const users = await sequelize.query ("SELECT * FROM users WHERE id=? AND admin=0", {replacements : [userId] , type: QueryTypes.SELECT});
-//   if (users.length == 0) {
-//      res.status(404).json({message: 'Utilisateur non trouvé'});
-//      return;
-//   } 
-//   // ** ** ** Effacer les likes du User : DELETE FROM likes WHERE userId=
-//   // ** ** ** Effacer les commentaires du User : DELETE FROM comments WHERE userId=?
-//   // ** ** ** Effacer les posts du User : deux chose à faires : lire les posts (Select) ; pour chaque post, effacer les likes du post, effacer les commentaires du post, effacer l'image du post puis après effacer le post
-//   //                                 SELECT * FROM posts where userId=?; DELETE FROM posts WHERE userId=?
-
-
-// }
 
 async function deleteUserCascade(userId)
 {
@@ -303,5 +226,4 @@ async function deleteUserCascade(userId)
   await sequelize.query ("DELETE FROM comments WHERE userId=?", {replacements : [userId] , type: QueryTypes.DELETE});
   await sequelize.query ("DELETE FROM users WHERE id=?", {replacements : [userId] , type: QueryTypes.DELETE});
 return true;
-
 }

@@ -1,24 +1,11 @@
 const db = require("../models");
 const Comments = db.comments;
-// const Op = db.Sequelize.Op;
 const sequelize = db.sequelize;
 const { QueryTypes } = require('sequelize');
 const jwt = require('jsonwebtoken');
-const { countComments } = require("../services/comments.services");
-
-// // USER ID
-
-// const userID = (req) => {
-//   const token = req.headers.authorization.split(' ')[1];
-//   console.log(token);
-//   const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
-//   const id = decodedToken.user_id;
-//   return id;
-// }
 
 // CREATE AND SAVE NEW COMMENT
 exports.createComment = (req, res) => {
-  console.log("controllerbegin");
   // Validate request
   if (!req.body.comment) {
     res.status(400).send({
@@ -29,14 +16,14 @@ exports.createComment = (req, res) => {
 
   const userId = req.userId;
 
-  // CREATE A COMMENT
+  // Create a comment
   const comment = {
     userId: userId,
     postId: req.body.postId,
     comment: req.body.comment
   };
 
-  // Save Tutorial in the database
+  // Save comment in the database
   Comments.create(comment)
     .then(data => {
       res.send(data);
@@ -49,10 +36,7 @@ exports.createComment = (req, res) => {
     });
 };
 
-
-
-
-
+// GET ALL COMMENTS
 exports.getAllComments = (req, res) => {
   // On lit le post_id dans l'url
   const postId = req.query.postId
@@ -67,9 +51,7 @@ exports.getAllComments = (req, res) => {
   })
 };
 
-
 // DELETE COMMENT
-
 exports.deleteComment = (req, res, next) => { 
   Comments.destroy({
     where: {
@@ -92,20 +74,4 @@ exports.deleteComment = (req, res, next) => {
       });
     }
   );
-};
-
-
-exports.getCommentCount = (req, res) => {
-  const postId = req.query.postId;
-
-  countComments(postId)
-    .then(results =>{
-      const count = results[0].CommentsCount;
-          res.status(200).json({count : count});
-          console.log(count);
-    }).catch(err => {
-      res.status(500).json({
-        error: err
-      });
-    })
 };

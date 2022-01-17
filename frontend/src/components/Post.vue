@@ -24,7 +24,7 @@
         </div>
             <div class="posts__image">
       <img  v-if="post.imageURL != null" class="posts__img"
-       :src="'http://localhost:8081/images/'+ post.imageURL"/>
+        :src="'http://localhost:8081/images/'+ post.imageURL"/>
     </div>
 
     <v-card-text class="posts__description">
@@ -39,8 +39,9 @@
     <div class="posts__react">
       <div class="posts__reactleft">
           <div class ="posts__reactlike">
-            <v-icon @click="likePost(post)" class="posts__reactlikeicon">mdi-thumb-up</v-icon>
-            <div class="posts__reactlikenumber">{{ post.like }}</div>
+            <v-icon  @click="likePost(post.id)" v-if="postIsLiked == false"  id ="myimage" class="posts__reactlikeicon rotating">mdi-thumb-up-outline</v-icon>
+            <v-icon  @click="likePost(post.id)" v-else id="myimage" class="posts__reactlikeicon rotating">mdi-thumb-up</v-icon>
+            <div class="posts__reactlikenumber">{{ post.countLikes }}</div>
           </div>
       </div>
       <div class="posts__reactright">
@@ -73,6 +74,7 @@ export default {
       like:"",
       countComments: "",
       isAdmin,
+      postIsLiked : false,
     };
   },
   methods: {
@@ -80,11 +82,41 @@ export default {
       PostsDataService.get(id)
         .then((response) => {
           this.post = response.data;
-          console.log(response.data);
         })
         .catch((e) => {
           console.log(e);
         });
+    },
+
+    likePost(postId) {
+     PostsDataService.likePost(postId)
+      .then(res => {
+        console.log(res);
+        this.getPost(this.$route.params.id);
+      })
+      .catch(error => {
+        alert('Action impossible !')
+        console.log(error)
+      })
+    },
+
+    getUserLike(id) {
+      PostsDataService.getOneLike(id)
+      .then(result => {
+        if (result.ok) {
+          return result.json()
+        } else {
+          return;
+        }
+      })
+      .then(data => {
+        if (data !== null) {
+          this.postIsLiked = true;
+        }
+      })
+      .catch(e => {
+        console.log(e)
+      })
     },
 
     deletePost(post) {
@@ -100,18 +132,22 @@ export default {
     },
   },
   mounted() {
+    this.getUserLike(this.$route.params.id);
     this.getPost(this.$route.params.id);
   },
 };
 </script>
 
-
-
 <style scoped lang="scss">
 @import "../scss/mixins.scss";
 @import "../scss/variables.scss";
 
-
+.rotating {
+  transition: transform 0.75s ease-in-out;
+}
+.rotating:hover {
+  transform: rotateZ(360deg);
+}
 
 
 .posts {
@@ -200,6 +236,9 @@ object-fit: cover !important;
   &__reactlikeicon {
     color: $icon-color;
     margin-right: 50%;
+  }
+  &__reactlikenumber {
+    font-weight: bold;
   }
   &__reactdislike {
     display: flex;

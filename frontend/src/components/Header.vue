@@ -2,6 +2,7 @@
   <header>
     <a href="/Posts" class="logo"><v-img src="../assets/logo_groupo.png" width="300px"> </v-img></a>
     <v-avatar
+      class="profile__avatar"
       @click="toProfile()"
       size="56"
     >
@@ -33,24 +34,16 @@ export default {
       this.$router.push('/Profile');
     },
 
-        getProfile() {
-      console.log("getProfile");
+    getProfile() {
       UsersDataService.myprofile()
         .then((response) => {
-          console.log("then");
-          console.log(response.status);
           this.user = response.data[0]; 
-          console.log(response.data)
-          console.log(response.data[0].id)
         })
         .catch((e) => {
-          console.log(e);
-          console.log(e.response.status);
           if (e.response.status == 401) {
             sessionStorage.clear();
             this.$router.push('/login')
           }
-          // console.error;
         });
     }
   },
@@ -68,10 +61,6 @@ header {
   padding: 1rem;
 }
 
-
-
-
-
 .profile__avatarimg {
   border: 1px solid black;
   cursor: pointer!important;
@@ -83,12 +72,21 @@ header {
     width: 13rem;
   }
 
+  .profile__avatar {
+    height: 2rem!important;
+    width: 2rem!important;
+  }
 }
 
 @media screen and (min-width:481px) and (max-width: 768px) {
 
   .logo {
     width: 18rem;
+  }
+
+  .profile__avatar {
+    height: 3rem!important;
+    width: 3rem!important;
   }
 
 }

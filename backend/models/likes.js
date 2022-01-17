@@ -7,9 +7,6 @@ module.exports = (sequelize, Sequelize) => {
     postId: {
       type: Sequelize.INTEGER,
       allowNull: false,
-    },
-    isLike: {
-      type: Sequelize.BOOLEAN
     }
   });
 

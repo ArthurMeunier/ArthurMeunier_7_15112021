@@ -9,9 +9,7 @@
     <v-btn v-if="isAdmin" class="posts__admin" fab color="green" @click="AdminRedirect()" fixed left bottom>
         <v-icon class="posts__adminicon">mdi-account-group</v-icon>
     </v-btn>
-    <transition name="fade">
       <Posts />
-    </transition>
     <Logout />
   </div>
 </template>
@@ -40,10 +38,10 @@ export default {
   },
   methods: {
     addPostRedirect() {
-      this.$router.push("/addPost");
+      this.$router.push("/AddPost");
     },
     AdminRedirect() {
-      this.$router.push("/admin");
+      this.$router.push("/Admin");
     },
   },
   components: {
@@ -59,12 +57,6 @@ export default {
 @import "../scss/mixins.scss";
 @import "../scss/variables.scss";
 
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s;
-}
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-  opacity: 0;
-}
 
 .mainPosts {
   flex: 1 1 auto;

@@ -50,8 +50,6 @@ import CommentsDataService from "../services/CommentsDataService";
           this.$refs.form.validate()
       },
         addComment() {
-          console.log("addComment");
-          // console.log(this.userId + "," + this.$route.params.id );
           CommentsDataService.create({ comment : this.comment, userId: this.userId, postId: this.$route.params.id })
             .then(() => {
               window.location.reload();

@@ -28,7 +28,8 @@ h1 {
 
 
 .v-avatar img {
-  width: unset!important;
+  width: 2rem;
+  height: 2rem;
 }
 
 

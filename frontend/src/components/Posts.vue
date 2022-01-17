@@ -1,56 +1,59 @@
 <template>
   <v-container fluid class="PostsContainer">
-    <v-card v-for="(post, index) in posts" :key="index"
-    class="mx-auto my-12 posts"
-    max-width="374"
-    >
+    <transition-group name="fade" tag="div" class="postsfade">
+      <v-card v-for="(post, index) in posts" :key="index+0"
+      class="mx-auto my-12 posts"
+      max-width="374"
+      >
 
-      <v-card class="posts__top" @click="postRedirect(post.id)">
+        <v-card class="posts__top" @click="postRedirect(post.id)">
 
-        <div class="posts__header">
-          <v-card-title class="posts__title">{{post.title}}</v-card-title>
-          <div class="posts__userinfo">
-            <v-avatar
-              class="posts__avatar"
-              size="24"
-            >
-              <img 
-                class="posts__avatarimg"
-                alt="Avatar"
-                :src="'http://localhost:8081/images/'+ post.userimageURL"
+          <div class="posts__header">
+            <v-card-title class="posts__title">{{post.title}}</v-card-title>
+            <div class="posts__userinfo">
+              <v-avatar
+                class="posts__avatar"
+                size="24"
               >
-            
-            </v-avatar>
-            <div class="posts__user">{{post.firstname}} {{post.lastname}}</div>
+                <img 
+                  class="posts__avatarimg"
+                  alt="Avatar"
+                  :src="'http://localhost:8081/images/'+ post.userimageURL"
+                >
+              
+              </v-avatar>
+              <div class="posts__user">{{post.firstname}} {{post.lastname}}</div>
+            </div>
           </div>
+          <div class="posts__image">
+            <img v-if="post.imageURL != null" class="posts__img"
+              :src="'http://localhost:8081/images/'+ post.imageURL"
+            >
+          </div>
+
+
+        </v-card>
+
+
+      <div class="posts__react">
+        <div class="posts__reactleft">
+            <div class ="posts__reactlike">
+              <v-icon  @click="likePost(post.id)" v-if="postIsLiked == false"  id ="myimage" class="posts__reactlikeicon rotating">mdi-thumb-up-outline</v-icon>
+              <v-icon  @click="likePost(post.id)" v-else id="myimage" class="posts__reactlikeicon rotating">mdi-thumb-up</v-icon>
+              <div class="posts__reactlikenumber">{{ post.countLikes }}</div>
+            </div>  
         </div>
-        <div class="posts__image">
-          <img v-if="post.imageURL != null" class="posts__img"
-            :src="'http://localhost:8081/images/'+ post.imageURL"
-          >
-        </div>
+        <div class="posts__reactright">
+          <div class ="posts__reactcomment">
+          <v-icon @click="postRedirect(post.id)" class="posts__reactcommenticon">mdi-message</v-icon>
+          <div class="posts__reactcommentnumber"> {{ post.countComments }}</div>
+          </div>   
+        </div>      
+      </div>
 
 
       </v-card>
-
-
-    <div class="posts__react">
-      <div class="posts__reactleft">
-          <div class ="posts__reactlike">
-            <v-icon @click="likePost(post)" id ="myimage" class="posts__reactlikeicon rotate">mdi-thumb-up</v-icon>
-            <div class="posts__reactlikenumber">{{ post.like }}</div>
-          </div>  
-      </div>
-      <div class="posts__reactright">
-        <div class ="posts__reactcomment">
-        <v-icon @click="postRedirect(post.id)" class="posts__reactcommenticon">mdi-message</v-icon>
-        <div class="posts__reactcommentnumber"> {{ post.countComments }}</div>
-        </div>   
-      </div>      
-    </div>
-
-
-    </v-card>
+  </transition-group>
   </v-container>
 </template>
 
@@ -67,10 +70,7 @@ export default {
     return {
       posts: [],
       isAdmin,
-      // title: "",
-      // description: "",
-      // imageURL: "",
-      // CommentsCount: "",
+      postIsLiked: false,
     };
   },
 
@@ -90,21 +90,35 @@ export default {
         });
     },
 
-    likePost(post) {
+    likePost(postId) {
+     PostsDataService.likePost(postId)
+      .then(res => {
+        console.log(res)
+        this.getAllPosts()
+      })
+      .catch(error => {
+        alert('Action impossible !')
+        console.log(error)
+      })
+    },
 
-     const data = {
-        like: post.like += 1
-      }
-
-      PostsDataService.update(post.id, data)
-      .then((response) => {
-        console.log(response.data);
-        // si il existe déjà un objet Like qui a pour user le current_user et pour post celui qui a le poce blo
-        // il faut supprimer cet objet et enlever 1 au post.like 
-        // Sinon, il faut créer cet objet Like et ajouter 1 au post.like
-      }).catch((e) => {
-          console.log(e);
-        });
+    getUserLike(id) {
+      PostsDataService.getOneLike(id)
+      .then(result => {
+        if (result.ok) {
+          return result.json()
+        } else {
+          return;
+        }
+      })
+      .then(data => {
+        if (data !== null) {
+          this.postIsLiked = true;
+        }
+      })
+      .catch(error => {
+        console.log(error)
+      })
     },
 
     getAllPosts() {
@@ -137,13 +151,10 @@ export default {
         lastname: post.lastname,
       };
     },
-    //  rotateImage() {
-    //     var img = document.getElementById('myimage');
-    //     img.style.transform = 'rotate(360deg)';
-    // }
   },
   mounted() {
     this.getAllPosts();
+    this.getUserLike();
   },
 };
 </script>
@@ -152,6 +163,20 @@ export default {
 <style scoped lang="scss">
 @import "../scss/mixins.scss";
 @import "../scss/variables.scss";
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 1s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
+.rotating {
+  transition: transform 0.5s ease-in-out;
+}
+.rotating:hover {
+  transform: rotateZ(360deg);
+}
 
 .mainPosts {
   flex: 1 1 auto;

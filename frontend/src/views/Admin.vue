@@ -62,7 +62,6 @@ export default {
       UsersDataService.getAll()
         .then((response) => {
           this.users = response.data.map(this.getUserContent);
-          console.log(this.users);
         })
         .catch((e) => {
           console.log(e);
@@ -86,9 +85,8 @@ export default {
       if(confirm("Voulez-vous vraiment supprimer cet utilisateur ?"))
       UsersDataService.delete(userId)
         .then((response) => {
-          console.log(response.status);
           this.user = response.data[0]; 
-            window.location.reload();
+          window.location.reload();
         })
         .catch((e) => {
           console.log(e.response.status);

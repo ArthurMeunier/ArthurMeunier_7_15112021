@@ -93,16 +93,10 @@ export default {
   
 
     createUser() {
-      console.log("createUser");
       UsersDataService.create(this.firstname, this.lastname, this.email, this.password)
         .then((response) => {
           console.log(response);
           this.$router.push({ name: "login" });
-          // for (var key in response.data) {
-          //   this.profile[key] = response.data[key];
-          //   this.$router.push({ name: "login" });
-          // return;
-          // }
         })
         .catch(() => {
           {

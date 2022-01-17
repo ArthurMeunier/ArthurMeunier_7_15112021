@@ -26,8 +26,8 @@
 
               <img 
                 class="profile__image"
-                v-on:click="openUpload" 
-                :src="'http://localhost:8081/images/'+ user.imageURL"
+                v-on:click="openUpload"
+                v-bind:src="imagePreview"
                 alt="Avatar"
               >
               <input
@@ -89,7 +89,7 @@ export default {
       },
       valid: true,
       hasFile: false,
-      imagePreview: 'http://localhost:8081/images/'+ this.imageURL
+      imagePreview: "'http://localhost:8081/images/'+ this.imageURL'"
     };
   },
   methods: {
@@ -101,42 +101,28 @@ export default {
       console.log("getProfile");
       UsersDataService.myprofile()
         .then((response) => {
-          console.log("then");
-          console.log(response.status);
           this.user = response.data[0]; 
-          console.log(response.data)
-          console.log(response.data[0].id)
         })
         .catch((e) => {
           console.log(e);
-          console.log(e.response.status);
           if (e.response.status == 401) {
             sessionStorage.clear();
             this.$router.push('/login')
           }
-          // console.error;
         });
     },
 
     async updateProfile() {
       const response = await this.sendFile();
-      console.log("updateProfile");    
 
       var data = {
         imageURL: response.data.file.filename,
       };
-      console.log(data);
-
-      
+   
       UsersDataService.update(this.user.id, data)
         .then((response) => {
           this.user.id = response.data.id;
-          console.log("inUpdate")
-          console.log(response.data);
-          console.log(data);
-          console.log(data.imageURL);
           this.user.imageURL = data.imageURL;
-          console.log(response.data);
           this.submitted = true;
         })
         .catch((e) => {
@@ -151,24 +137,18 @@ export default {
     },
 
     deleteUser() {
-      console.log("deleteUser");
-      console.log();
       if(confirm("Voulez-vous vraiment supprimer votre compte ? Cette action est définitive.")) {
       UsersDataService.deleteme()
         .then((response) => {
-          console.log("thendeleteUser");
-          console.log(response.status);
           this.user = response.data[0]; 
           this.$router.push('/login')
         })
         .catch((e) => {
           console.log(e);
-          console.log(e.response.status);
           if (e.response.status == 401) {
             sessionStorage.clear();
             this.$router.push('/login')
           }
-          // console.error;
         });
       }
     },
@@ -186,7 +166,7 @@ export default {
         }
         reader = new FileReader();
         reader.onload = (e) => {
-          this.imagePreview = e.target.result
+          this.imagePreview = e.target.result;
         }
         reader.readAsDataURL(files[0])
       },
@@ -212,20 +192,15 @@ export default {
     async sendFile() {
       let formData = new FormData();
       formData.append('file', this.file);
-      console.log("sendfile");
-      console.log(this.file);
       
       let response = null;
 
        try {
         response = await axios.post('http://localhost:8080/upload', formData);
-        console.log(response);
       } catch(err) {
         this.message = err.response.data.error;
         this.error = true;
-        console.log(this.file.filename);
-
-      console.log(err);
+        console.log(err);
       }
       return response;
     },

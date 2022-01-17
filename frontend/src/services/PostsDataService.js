@@ -5,6 +5,18 @@ class PostsDataService {
     return http.get("/posts/");
   }
 
+  likePost(id) {
+    return http.post(`/posts/${id}/likes`);
+  }
+
+  getAllLikes(id) {
+    return http.get(`/posts/${id}/likes`);
+  }
+
+  getOneLike(id) {
+    return http.get(`/posts/${id}/like`);
+  }
+
   get(id) {
     return http.get(`/posts/${id}`);
   }

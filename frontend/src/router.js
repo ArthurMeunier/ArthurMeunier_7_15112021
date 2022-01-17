@@ -9,7 +9,7 @@ export default new Router({
     {
       path: "/",
       alias: "/login",
-      name: "login",
+      name: "Login",
       component: () => import("./views/Login")
     },
     {
@@ -19,28 +19,32 @@ export default new Router({
     },
     {
       path: "/posts/",
-      name: "posts",
+      name: "Posts",
       component: () => import("./views/Posts")
     },
     {
       path: "/addPost/",
-      name: "addPost",
+      name: "AddPost",
       component: () => import("./views/AddPost")
     },
     {
       path: "/posts/:id",
-      name: "post",
+      name: "Post",
       component: () => import("./views/Post")
     },
     {
       path: "/profile/",
-      name: "profile",
+      name: "Profile",
       component: () => import("./views/Profile")
     },
     {
       path: "/admin/",
-      name: "admin",
+      name: "Admin",
       component: () => import("./views/Admin")
+    },
+    {
+      path: '*',
+      redirect: 'posts'
     }
   ]
 });

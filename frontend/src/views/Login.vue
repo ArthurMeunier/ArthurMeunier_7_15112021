@@ -64,7 +64,6 @@ export default {
             let responseAdmin = response.data.admin;
             sessionStorage.setItem("token", responseToken);
             sessionStorage.setItem("admin", responseAdmin);
-            // this.$router.push("/Posts");
             window.location.href="/Posts";
           })
           .catch(() => {

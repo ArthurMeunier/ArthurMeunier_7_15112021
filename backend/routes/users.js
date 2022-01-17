@@ -6,14 +6,10 @@ module.exports = app => {
 
   router.post("/signup", users.createUser);
   router.post("/login", users.loginUser);
+
   router.get("/profile", auth, users.getProfile);
-
-  
   router.get("/", auth, users.getAllUsers);
-  router.get("/:id", users.getOneUser);
-  
-
-
+  router.get("/:id", auth, users.getOneUser);
   router.put("/:id", auth, users.updateUser);
 
   router.delete("/deleteme", auth, users.deleteMe);

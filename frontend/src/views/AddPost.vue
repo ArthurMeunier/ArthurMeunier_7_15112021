@@ -102,7 +102,6 @@ export default {
       if (response != null) {
         imageURL = response.data.file.filename;
       }
-      console.log("addpost");    
 
       var data = {
         userId: this.post.userId,
@@ -110,13 +109,11 @@ export default {
         description: this.post.description,
         imageURL: imageURL,
       };
-      console.log(data);
 
 
       PostsDataService.create(data)
         .then((response) => {
           this.post.id = response.data.id;
-          console.log(response.data);
           this.submitted = true;
         })
         .catch((e) => {
@@ -155,18 +152,14 @@ export default {
       }
       let formData = new FormData();
       formData.append('file', this.file);
-      console.log("sendfile");
-      console.log(this.file);
       
       let response = null;
 
        try {
         response = await axios.post('http://localhost:8080/upload', formData);
-        console.log(response);
       } catch(err) {
         this.message = err.response.data.error;
         this.error = true;
-        console.log(this.file.filename);
 
       console.log(err);
       }

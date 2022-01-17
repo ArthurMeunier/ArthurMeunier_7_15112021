@@ -33,7 +33,6 @@
 
 
 <script>
-// import axios from "axios";
 import CommentsDataService from "../services/CommentsDataService";
 const isAdmin = sessionStorage.getItem("admin") == "true";
 

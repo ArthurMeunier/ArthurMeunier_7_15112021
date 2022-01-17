@@ -4,7 +4,6 @@ const Op = db.Sequelize.Op;
 const sequelize = db.sequelize;
 const { QueryTypes } = require("sequelize");
 const jwt = require('jsonwebtoken');
-const { countComments } = require("../services/comments.services");
 const fs = require('fs');
 
 // CREATE AND SAVE NEW POST
@@ -41,62 +40,29 @@ exports.createPost = (req, res) => {
     });
 };
 
-// // GET ALL POSTS 
-// exports.getAllPosts = (req, res, next) => {
-//   Posts.findAll({
-//   }).then(
-//     async (posts) => {
-//       postsPromises = posts.map(async (post) => {
-//         console.log(post);
-//          const count = await countComments(post.id);
-//           return {
-//             ...post.dataValues,
-//             ...count
-//           }
-//       })
-//       posts = await Promise.all(postsPromises);
-//       res.status(200).json(posts);
-//     }
-//   ).catch(
-//     (error) => {
-//       res.status(400).json({
-//         error: error
-//       });
-//     }
-//   );
-// };
-
-
+// GET ALL POSTS
 exports.getAllPosts = async (req, res, next) => {
-
   const sql = `SELECT a.*, a.like, b.firstname, b.lastname, b.imageURL AS userimageURL, IFNULL(c.countComments,0) AS countComments,
-  IFNULL(d.countLikes,0) AS countLikes,
-  IFNULL(e.countDislikes,0) AS countDislikes
+  IFNULL(d.countLikes,0) AS countLikes
   FROM posts a
   INNER JOIN users b ON a.userId = b.id
   LEFT OUTER JOIN (SELECT COUNT(id) AS countComments, postId FROM comments GROUP BY postId ) c ON a.id = c.postId
-  LEFT OUTER JOIN (SELECT COUNT(id) AS countLikes, postId FROM likes WHERE isLike = 1 GROUP BY postId) d ON a.id = d.postId
-  LEFT OUTER JOIN (SELECT COUNT(id) AS countDislikes, postId FROM likes WHERE isLike = 0 GROUP BY postId) e ON a.id = e.postId
+  LEFT OUTER JOIN (SELECT COUNT(id) AS countLikes, postId FROM likes GROUP BY postId) d ON a.id = d.postId
   ORDER BY a.createdAt DESC`;
 
   const posts = await sequelize.query(sql, { type: QueryTypes.SELECT });
 
   res.status(200).json(posts);
-
-
 };
 
-
+// GET ONE POST
 exports.getOnePost = async (req, res, next) => {
-
   const sql = `SELECT a.*, b.firstname, b.lastname, b.imageURL AS userimageURL, IFNULL(c.countComments,0) AS countComments,
-  IFNULL(d.countLikes,0) AS countLikes,
-  IFNULL(e.countDislikes,0) AS countDislikes
+  IFNULL(d.countLikes,0) AS countLikes
   FROM posts a
   INNER JOIN users b ON a.userId = b.id
   LEFT OUTER JOIN (SELECT COUNT(id) AS countComments, postId FROM comments GROUP BY postId ) c ON a.id = c.postId
-  LEFT OUTER JOIN (SELECT COUNT(id) AS countLikes, postId FROM likes WHERE isLike = 1 GROUP BY postId) d ON a.id = d.postId
-  LEFT OUTER JOIN (SELECT COUNT(id) AS countDislikes, postId FROM likes WHERE isLike = 0 GROUP BY postId) e ON a.id = e.postId
+  LEFT OUTER JOIN (SELECT COUNT(id) AS countLikes, postId FROM likes GROUP BY postId) d ON a.id = d.postId
   WHERE a.id =?`;
 
   const posts = await sequelize.query(sql, { replacements: [req.params.id], type: QueryTypes.SELECT });
@@ -104,39 +70,9 @@ exports.getOnePost = async (req, res, next) => {
     res.status(403).json({err: "Publication inconnue"});
   }
   res.status(200).json(posts[0]);
-
-
 };
 
-
-// // FIND ONE POST
-// exports.getOnePost = (req, res, next) => {
-//   Posts.findOne({
-//     where: {
-//       id: req.params.id
-//     }
-//   }).then(
-//     (post) => {
-//       if (post) {
-//         res.status(200).json(post);
-//       } else {
-//         res.status(404).json({
-//           error: "Not found"
-//         });
-//       }
-//     }
-//   ).catch(
-//     (error) => {
-//       res.status(500).json({
-//         error: error
-//       });
-//     }
-//   );
-// };
-
-
 // UPDATE POST
-
 exports.updatePost = (req, res, next) => {
   Posts.findOne({
     where: {
@@ -193,29 +129,3 @@ exports.deletePost = (req, res, next) => {
     }
   );
 };
-
-// // Supprimer un post par l'utilisateur
-// exports.deletePost = (req, res) => {
-//   const id = req.params.id;
-//   const userId = req.body.userId;
-
-//   Posts.findOne({ where: { id: id } })
-//       .then(post => {
-//           // Si le post a une image, supprimer l'image du dossier '/images' et supprimer le post
-//               // Sinon supprimer le post directement
-//           if (post.imageURL) {
-//               const filename = post.imageURL.split('/images/')[1];
-//               fs.unlink(`../frontend/public/images/${filename}`, () => {
-//                   Posts.destroy({ where: { id: id }})
-//                       .then(() => res.status(200).json({ message: 'Post supprimé avec succès' }))
-//                       .catch(error => res.status(400).json({ message: 'Impossible de supprimer ce post', error }));
-//               })
-//           } else {
-//               Posts.destroy({ where: { id: id }})
-//                   .then(() => res.status(200).json({ message: 'Post supprimé avec succès' }))
-//                   .catch(error => res.status(400).json({ message: 'Impossible de supprimer ce post', error }));
-//           }
-//       })
-//       .catch(error => res.status(500).json({ error }))
-// }
-
