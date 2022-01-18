@@ -38,7 +38,7 @@
           type="password"
           :rules="[rules.required, rules.min]"
           label="Mot de passe"
-          hint="Au moins 2 caractères"
+          hint="Au moins 8 caractères"
         ></v-text-field>
 
         <v-btn
@@ -82,7 +82,7 @@ export default {
       password: '',
         rules: {
           required: value => !!value || 'Ce champ est requis',
-          min: v => v.length >= 2 || '8 caractères minimum'
+          min: v => v.length >= 8 || '8 caractères minimum'
         },
     }),
 
@@ -96,7 +96,7 @@ export default {
       UsersDataService.create(this.firstname, this.lastname, this.email, this.password)
         .then((response) => {
           console.log(response);
-          this.$router.push({ name: "login" });
+          this.$router.push({ name: "Login" });
         })
         .catch(() => {
           {
@@ -107,6 +107,12 @@ export default {
   },
   components: {
     HeaderOffline,
+  },
+  created: 
+  function() {
+    if (sessionStorage.getItem("token") != null) {
+      window.location.href="/Posts";
+    }
   }
 };
 </script>

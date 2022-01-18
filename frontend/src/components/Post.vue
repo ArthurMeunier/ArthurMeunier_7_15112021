@@ -39,15 +39,19 @@
     <div class="posts__react">
       <div class="posts__reactleft">
           <div class ="posts__reactlike">
-            <v-icon  @click="likePost(post.id)" v-if="postIsLiked == false"  id ="myimage" class="posts__reactlikeicon rotating">mdi-thumb-up-outline</v-icon>
-            <v-icon  @click="likePost(post.id)" v-else id="myimage" class="posts__reactlikeicon rotating">mdi-thumb-up</v-icon>
-            <div class="posts__reactlikenumber">{{ post.countLikes }}</div>
+            <v-icon  @click="likePost(post.id)" v-if="postIsLiked == true" class="posts__reactlikeicon rotating">mdi-thumb-up-outline</v-icon>
+            <v-icon  @click="likePost(post.id)" v-else class="posts__reactlikeicon rotating">mdi-thumb-up</v-icon>
+            <div v-if="post.countLikes <= 0" class="posts__reactlikenumber">{{ post.countLikes }}</div>
+            <div v-else class="posts__reactlikenumberbold">{{ post.countLikes }}</div>
           </div>
       </div>
       <div class="posts__reactright">
         <div class ="posts__reactcomment">
-        <v-icon class="posts__reactcommenticon">mdi-message</v-icon>
-          <div class="posts__reactcommentnumber">{{ post.countComments }}</div>
+        <v-icon v-if="post.countComments <= 0" class="posts__reactcommenticon">mdi-message-outline</v-icon>
+        <v-icon v-else class="posts__reactcommenticon">mdi-message</v-icon>
+
+          <div v-if="post.countComments <= 0" class="posts__reactcommentnumber"> {{ post.countComments }}</div>
+          <div v-else class="posts__reactcommentnumberbold"> {{ post.countComments }}</div>
         </div>   
       </div>      
     </div>
@@ -100,25 +104,6 @@ export default {
       })
     },
 
-    getUserLike(id) {
-      PostsDataService.getOneLike(id)
-      .then(result => {
-        if (result.ok) {
-          return result.json()
-        } else {
-          return;
-        }
-      })
-      .then(data => {
-        if (data !== null) {
-          this.postIsLiked = true;
-        }
-      })
-      .catch(e => {
-        console.log(e)
-      })
-    },
-
     deletePost(post) {
       if(confirm("Voulez-vous vraiment supprimer cette publication ?")) {
       PostsDataService.delete(post.id)
@@ -132,7 +117,6 @@ export default {
     },
   },
   mounted() {
-    this.getUserLike(this.$route.params.id);
     this.getPost(this.$route.params.id);
   },
 };
@@ -195,7 +179,6 @@ object-fit: cover !important;
     border-radius: 24px;
   }
     &__description {
-    margin-top: 1rem;
     text-align: center;
     font-weight: 600;
   }
@@ -237,7 +220,10 @@ object-fit: cover !important;
     color: $icon-color;
     margin-right: 50%;
   }
-  &__reactlikenumber {
+  &__reactlikenumberbold {
+    font-weight: bold;
+  } 
+  &__reactcommentnumberbold {
     font-weight: bold;
   }
   &__reactdislike {

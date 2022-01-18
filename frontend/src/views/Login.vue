@@ -77,6 +77,12 @@ export default {
   components: {
     HeaderOffline,
   },
+  created: 
+  function() {
+    if (sessionStorage.getItem("token") != null) {
+      window.location.href="/Posts";
+    }
+  }
 };
 </script>
 

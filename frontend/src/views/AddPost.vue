@@ -119,7 +119,7 @@ export default {
         .catch((e) => {
           console.log(e);
         });
-      this.$router.push({ name: "posts" });
+      this.$router.push({ name: "Posts" });
       window.location.reload();
     },
 
@@ -174,7 +174,8 @@ export default {
         console.log('e', e)
         var reader, files = e.target.files
         if (files.length === 0) {
-          console.log('Empty')
+          console.log('Empty');
+          return
         }
         reader = new FileReader();
         reader.onload = (e) => {

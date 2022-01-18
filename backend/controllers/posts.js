@@ -107,25 +107,36 @@ exports.updatePost = (req, res, next) => {
 
 // DELETE POST
 exports.deletePost = (req, res, next) => {
-  Posts.destroy({
+  Posts.findOne({
     where: {
       id: req.params.id
     }
   }).then(
     (post) => {
-      if (post) {
-        res.status(200).json(post);
-      } else {
-        res.status(404).json({
-          error: "Not found"
-        });
-      }
-    }
-  ).catch(
-    (error) => {
-      res.status(500).json({
-        error: error
-      });
-    }
-  );
+      if (post) { 
+        Posts.destroy({
+          where: {
+            id: req.params.id
+          }
+          }).then(
+          (deleteCount) => {
+            if (post) {
+              if (fs.existsSync('../frontend/public/images/'+ post.imageURL)) {
+                fs.unlinkSync('../frontend/public/images/'+ post.imageURL);
+              }
+              res.status(200).json(deleteCount);
+            } else {
+              res.status(404).json({
+                error: "Not found"
+              });
+            }
+          }
+        ).catch(
+          (error) => {
+            res.status(500).json({
+              error: error
+            });
+          }
+        );
+  }});
 };

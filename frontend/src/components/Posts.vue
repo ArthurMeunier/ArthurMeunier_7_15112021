@@ -38,15 +38,22 @@
       <div class="posts__react">
         <div class="posts__reactleft">
             <div class ="posts__reactlike">
-              <v-icon  @click="likePost(post.id)" v-if="postIsLiked == false"  id ="myimage" class="posts__reactlikeicon rotating">mdi-thumb-up-outline</v-icon>
-              <v-icon  @click="likePost(post.id)" v-else id="myimage" class="posts__reactlikeicon rotating">mdi-thumb-up</v-icon>
-              <div class="posts__reactlikenumber">{{ post.countLikes }}</div>
+              <v-icon  @click="likePost(post.id)" v-if="post.countLikes <= 0" class="posts__reactlikeicon rotating">mdi-thumb-up-outline</v-icon>
+              <v-icon  @click="likePost(post.id)" v-else class="posts__reactlikeicon rotating">mdi-thumb-up</v-icon>
+              <div v-if="post.countLikes <= 0" class="posts__reactlikenumber">{{ post.countLikes }}</div>
+              <div v-else class="posts__reactlikenumberbold">{{ post.countLikes }}</div>
             </div>  
         </div>
         <div class="posts__reactright">
           <div class ="posts__reactcomment">
-          <v-icon @click="postRedirect(post.id)" class="posts__reactcommenticon">mdi-message</v-icon>
-          <div class="posts__reactcommentnumber"> {{ post.countComments }}</div>
+          
+          <v-icon @click="postRedirect(post.id)" v-if="post.countComments <= 0" class="posts__reactcommenticon">mdi-message-outline</v-icon>
+          <v-icon @click="postRedirect(post.id)" v-else class="posts__reactcommenticon">mdi-message</v-icon>
+
+          <!-- <v-icon @click="postRedirect(post.id)" class="posts__reactcommenticon">mdi-message</v-icon> -->
+
+          <div v-if="post.countComments <= 0" class="posts__reactcommentnumber"> {{ post.countComments }}</div>
+          <div v-else class="posts__reactcommentnumberbold"> {{ post.countComments }}</div>
           </div>   
         </div>      
       </div>
@@ -102,24 +109,6 @@ export default {
       })
     },
 
-    getUserLike(id) {
-      PostsDataService.getOneLike(id)
-      .then(result => {
-        if (result.ok) {
-          return result.json()
-        } else {
-          return;
-        }
-      })
-      .then(data => {
-        if (data !== null) {
-          this.postIsLiked = true;
-        }
-      })
-      .catch(error => {
-        console.log(error)
-      })
-    },
 
     getAllPosts() {
       PostsDataService.getAll()
@@ -154,7 +143,6 @@ export default {
   },
   mounted() {
     this.getAllPosts();
-    this.getUserLike();
   },
 };
 </script>
@@ -224,7 +212,6 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 1rem;
   }
   &__img {
     object-fit: cover!important;
@@ -233,6 +220,7 @@ export default {
     justify-content: center;
     height: 250px;
     border-radius: 24px;
+    margin-bottom: 1rem;
   }
 
   &__description {
@@ -268,7 +256,10 @@ export default {
     margin-right: 50%;
     color: $icon-color;
   }
-  &__reactlikenumber {
+  &__reactlikenumberbold {
+    font-weight: bold;
+  } 
+  &__reactcommentnumberbold {
     font-weight: bold;
   }
   &__reactright {

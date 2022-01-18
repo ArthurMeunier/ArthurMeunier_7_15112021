@@ -89,7 +89,7 @@ export default {
       },
       valid: true,
       hasFile: false,
-      imagePreview: "'http://localhost:8081/images/'+ this.imageURL'"
+      imagePreview: "http://localhost:8081/images/"
     };
   },
   methods: {
@@ -101,7 +101,8 @@ export default {
       console.log("getProfile");
       UsersDataService.myprofile()
         .then((response) => {
-          this.user = response.data[0]; 
+          this.user = response.data[0];
+          this.imagePreview += this.user.imageURL;
         })
         .catch((e) => {
           console.log(e);

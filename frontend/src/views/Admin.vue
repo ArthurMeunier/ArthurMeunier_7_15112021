@@ -134,7 +134,7 @@ export default {
     margin-right: 1rem;
   }
   &__deleteicon {
-    color: black;
+    color: black!important;
     border: 1px solid black;
     border-radius: 15px;
   }

@@ -114,9 +114,9 @@ export default {
 .comments {
   max-width: 800px!important;
   width: 800px;
-  border-radius: 20px!important;
   @include flexcenter;
   &__comment {
+    border-radius: 25px!important;
     background-color: $comment-color;
     width: 35rem!important;
     display: flex;
