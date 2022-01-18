@@ -144,9 +144,12 @@ exports.updateUser = (req, res, next) => {
     (user) => {
       if (user) {
         if (user.imageURL!=req.body.imageURL) {
+          if (user.imageURL!="default.png") {
           if (fs.existsSync('../frontend/public/images/'+ user.imageURL)) {
             fs.unlinkSync('../frontend/public/images/'+ user.imageURL);
           }
+          }
+
         }
         for (var key in req.body) {
           user[key] = req.body[key]

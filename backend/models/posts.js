@@ -5,11 +5,11 @@ module.exports = (sequelize, Sequelize) => {
       allowNull: true,
     },
     title: {
-      type: Sequelize.STRING(100),
+      type: Sequelize.STRING(75),
       allowNull: false,
     },
     description: {
-      type: Sequelize.STRING(300),
+      type: Sequelize.STRING(500),
       allowNull: false
     },
     imageURL: {

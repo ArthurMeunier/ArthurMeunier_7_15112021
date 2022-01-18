@@ -15,11 +15,14 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
+@import "./scss/mixins.scss";
+@import "./scss/variables.scss";
 
 .v-main {
   font-family: 'Rajdhani', sans-serif;
-  background-color: #f4f3ee;
+    background-color: $mainbackgroundcolor;
+
 }
 
 h1 {

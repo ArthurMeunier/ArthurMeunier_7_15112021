@@ -39,7 +39,7 @@
     <div class="posts__react">
       <div class="posts__reactleft">
           <div class ="posts__reactlike">
-            <v-icon  @click="likePost(post.id)" v-if="postIsLiked == true" class="posts__reactlikeicon rotating">mdi-thumb-up-outline</v-icon>
+            <v-icon  @click="likePost(post.id)" v-if="post.countLikes <= 0" class="posts__reactlikeicon rotating">mdi-thumb-up-outline</v-icon>
             <v-icon  @click="likePost(post.id)" v-else class="posts__reactlikeicon rotating">mdi-thumb-up</v-icon>
             <div v-if="post.countLikes <= 0" class="posts__reactlikenumber">{{ post.countLikes }}</div>
             <div v-else class="posts__reactlikenumberbold">{{ post.countLikes }}</div>
@@ -127,7 +127,7 @@ export default {
 @import "../scss/variables.scss";
 
 .rotating {
-  transition: transform 0.75s ease-in-out;
+  transition: transform 0.75s ease-in-out!important;
 }
 .rotating:hover {
   transform: rotateZ(360deg);

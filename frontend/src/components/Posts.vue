@@ -160,11 +160,12 @@ export default {
 }
 
 .rotating {
-  transition: transform 0.5s ease-in-out;
+  transition: transform 0.75s ease-in-out!important;
 }
 .rotating:hover {
   transform: rotateZ(360deg);
 }
+
 
 .mainPosts {
   flex: 1 1 auto;

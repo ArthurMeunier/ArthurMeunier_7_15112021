@@ -15,17 +15,18 @@
           >
           <v-text-field
             v-model="post.title"
-            :rules="[(v) => !!v || 'Ce champs est requis']"
             label="Titre"
+            :rules="titleRules"
             required
+            clearable
           ></v-text-field>
 
           <v-textarea
             v-model="post.description"
-            :rules="[(v) => !!v || 'Ce champs est requis']"
+            :rules="descriptionRules"
             label="Description"
             required
-          ></v-textarea>
+            ></v-textarea>
 
             <input
                 type="file"
@@ -84,6 +85,14 @@ export default {
       imagePreview: '',
       error: false,
       valid: true,
+      titleRules: [
+        v => !!v || 'Ce champ est requis',
+        v => (v && v.length <= 75) || '75 caractères maximum',
+      ],
+      descriptionRules: [
+        v => !!v || 'Ce champ est requis',
+        v => (v && v.length <= 500) || '500 caractères maximum',
+      ],
       post: {
         id: null,
         userId: "",
@@ -233,7 +242,7 @@ export default {
 }
 
 #addpost__text {
-  background-color: whitesmoke!important;
+  background-color: $border-color;
   border: 2px dashed black;
   height: 5rem;
   text-align: center;
@@ -282,12 +291,6 @@ h1 {
   .addpost__form {
     width: 26rem!important;
   }
-
-}
-
-@media screen and (min-width:769px) and (max-width: 1024px) {
-
-
 
 }
 </style>

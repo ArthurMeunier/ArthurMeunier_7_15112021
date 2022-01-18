@@ -65,6 +65,9 @@
       >
       Supprimer mon compte 
       </v-btn>
+
+      <div class="profile__message" v-if="message">{{ message }}</div>
+
   </div>
   <Logout />
 </div>
@@ -87,6 +90,7 @@ export default {
         user: {
         imageURL: ""
       },
+      message: "",
       valid: true,
       hasFile: false,
       imagePreview: "http://localhost:8081/images/"
@@ -149,6 +153,9 @@ export default {
           if (e.response.status == 401) {
             sessionStorage.clear();
             this.$router.push('/login')
+          }
+          if (e.response.status == 404) {
+             this.message = "Impossible de supprimer cet utilisateur";
           }
         });
       }
@@ -243,7 +250,6 @@ export default {
   }
   &__image {
     border: 2px solid black;
-    width: unset!important;
     cursor: pointer!important;
   }
   &__info {
@@ -261,6 +267,10 @@ export default {
   }
   &__deletebtn {
     margin-top: 4rem;
+  }
+  &__message {
+    color: red;
+    margin-top: 2rem;
   }
 }
 
