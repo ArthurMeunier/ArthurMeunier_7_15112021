@@ -5,7 +5,6 @@ class PostsDataService {
     return http.get("/posts/");
   }
 
-
   get(id) {
     return http.get(`/posts/${id}`);
   }

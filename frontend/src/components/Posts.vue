@@ -26,7 +26,7 @@
             </div>
           </div>
           <div class="posts__image">
-            <img v-if="post.imageURL != null" class="posts__img"
+            <img v-if="post.imageURL != null" class="posts__img" alt="postImage"
               :src="'http://localhost:8081/images/'+ post.imageURL"
             >
           </div>
@@ -50,8 +50,6 @@
           <v-icon @click="postRedirect(post.id)" v-if="post.countComments <= 0" class="posts__reactcommenticon">mdi-message-outline</v-icon>
           <v-icon @click="postRedirect(post.id)" v-else class="posts__reactcommenticon">mdi-message</v-icon>
 
-          <!-- <v-icon @click="postRedirect(post.id)" class="posts__reactcommenticon">mdi-message</v-icon> -->
-
           <div v-if="post.countComments <= 0" class="posts__reactcommentnumber"> {{ post.countComments }}</div>
           <div v-else class="posts__reactcommentnumberbold"> {{ post.countComments }}</div>
           </div>   
@@ -66,7 +64,6 @@
 
 
 <script>
-// import axios from "axios";
 import PostsDataService from "../services/PostsDataService";
 const isAdmin = sessionStorage.getItem("admin") == "true";
 
@@ -283,7 +280,6 @@ export default {
 
 
 @media screen and (max-width:480px) {
-
   .posts {
     width: 17rem!important;
     &__title {
@@ -299,11 +295,9 @@ export default {
       width: 7rem!important;
     }
   }
-
 }
 
 @media screen and (min-width:481px) and (max-width: 768px) {
-
   .posts {
     width: 25rem!important;
     &__title {
@@ -316,11 +310,9 @@ export default {
       height: 175px;
     }
   }
-
 }
 
 @media screen and (min-width:769px) and (max-width: 1024px) {
-
   .posts {
     width: 40rem!important;
     &__title {
@@ -330,6 +322,5 @@ export default {
       height: 225px;
     }
   }
-
 }
 </style>

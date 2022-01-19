@@ -1,6 +1,6 @@
 <template>
   <header>
-    <a href="/Posts" class="logo"><v-img src="../assets/logo_groupo.png" width="300px"> </v-img></a>
+    <a href="/Posts" class="logo"><v-img src="../assets/logo_groupo.png" alt="logo" width="300px"> </v-img></a>
     <v-avatar
       class="profile__avatar"
       @click="toProfile()"
@@ -67,7 +67,6 @@ header {
 }
 
 @media screen and (max-width: 480px) {
-
   .logo {
     width: 13rem;
   }
@@ -88,7 +87,5 @@ header {
     height: 3rem!important;
     width: 3rem!important;
   }
-
 }
-
 </style>

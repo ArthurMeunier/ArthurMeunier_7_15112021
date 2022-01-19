@@ -34,7 +34,7 @@
 <script>
 import CommentsDataService from "../services/CommentsDataService";
 
-  export default {
+export default {
     name: "addcomment",
       data: () => ({
       valid: true,
@@ -57,7 +57,7 @@ import CommentsDataService from "../services/CommentsDataService";
         }); 
     },
   },
-  }
+}
 </script>
 
 
@@ -74,11 +74,9 @@ import CommentsDataService from "../services/CommentsDataService";
 }
 
 @media screen and (max-width:480px) {
-
   .addcomment__form {
     width: 17rem!important;
   }
-
 }
 
 @media screen and (min-width:481px) and (max-width: 768px) {
@@ -94,8 +92,5 @@ import CommentsDataService from "../services/CommentsDataService";
   .addcomment__form {
     width: 40rem;
   }
-
-
 }
-
 </style>

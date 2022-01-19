@@ -16,7 +16,6 @@
 
 
 <script>
-// import axios from "axios";
 import Header from "../components/Header.vue";
 import Posts from "../components/Posts.vue";
 import Logout from "../components/Logout.vue";
@@ -63,7 +62,6 @@ export default {
   max-width: 100%;
   position: relative;
 }
-
 
 .posts {
   background-color: $card-color;
@@ -149,5 +147,4 @@ export default {
       padding: 1rem;
     }
 }
-
 </style>

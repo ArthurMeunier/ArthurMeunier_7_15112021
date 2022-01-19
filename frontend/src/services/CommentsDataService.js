@@ -13,8 +13,6 @@ class commentsDataService {
     return http.get(`/comments/${id}`);
   }
 
-
-
   create(data) {
     return http.post("/comments/", data, {
     headers: {

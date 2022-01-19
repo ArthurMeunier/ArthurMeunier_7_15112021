@@ -1,8 +1,4 @@
 <template>
-  <!-- <div class="return" @click="toPosts()">
-    <v-icon class="return__icon">mdi-arrow-left-thick</v-icon>
-  </div> -->
-
   <v-btn class="return" fab @click="$router.go(-1)" fixed left top>
       <v-icon class="return__icon">mdi-arrow-left-thick</v-icon>
     </v-btn>
@@ -33,7 +29,6 @@ export default {
 }
 
 @media screen and (max-width:480px) {
-
   .return {
     top: 5rem!important;
     left: 1.2rem!important;
@@ -43,11 +38,6 @@ export default {
       border: 0;
       padding: 1rem;
     }
+  }
 }
-
-}
-
-
-
-
 </style>

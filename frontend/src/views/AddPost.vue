@@ -38,7 +38,7 @@
               > 
       
         <div v-on:click="openUpload" id="addpost__text">AJOUTER UNE IMAGE</div>
-          <img v-bind:src="imagePreview"  v-on:click="openUpload" id="addpost__preview" >
+          <img v-bind:src="imagePreview" alt="imagePreview" v-on:click="openUpload" id="addpost__preview" >
           <v-btn
           :disabled="!valid"
           color="primary"
@@ -194,11 +194,7 @@ export default {
         }
         reader.readAsDataURL(files[0])
       }
-
-
-    
-
-  },
+    },
   components: {
     Header,
     Logout,
@@ -206,8 +202,6 @@ export default {
   }
 };
 </script>
-
-
 
 <style lang="scss">
 @import "../scss/mixins.scss";
@@ -271,7 +265,6 @@ h1 {
 }
 
 @media screen and (max-width:480px) {
-
   .addpost__card {
     width: 16rem!important;
   }
@@ -279,11 +272,9 @@ h1 {
   .addpost__form {
     width: 16rem!important;
   }
-
 }
 
 @media screen and (min-width:481px) and (max-width: 768px) {
-
   .addpost__card {
     width: 26rem!important;
   }
@@ -291,6 +282,5 @@ h1 {
   .addpost__form {
     width: 26rem!important;
   }
-
 }
 </style>

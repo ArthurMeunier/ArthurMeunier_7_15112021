@@ -16,13 +16,10 @@
       >
         <div class="profile__picture">
           <v-avatar
-              class="profile__avatar"
-              size="110"
-
-              >
-            <!-- <img
-              src="http://localhost:8081/images/1641305703123.png"
-            > -->
+            class="profile__avatar"
+            size="110"
+          >
+    
 
               <img 
                 class="profile__image"

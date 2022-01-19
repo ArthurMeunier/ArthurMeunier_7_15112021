@@ -33,7 +33,7 @@ var upload = multer({ storage: storage });
 
 
 var corsOptions = {
-  // ici tu défini quelle url a le droit d'accéder à ton api. C'est donc l'url du front qu'il faut mettre
+  // Ici, on définit quelle URL a le droit d'accéder à l'API. C'est donc l'url du front qu'il faut mettre.
   origin: "http://localhost:8081"
 };
 

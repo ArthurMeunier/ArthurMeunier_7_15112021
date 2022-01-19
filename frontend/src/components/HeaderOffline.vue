@@ -1,6 +1,6 @@
 <template>
   <header class="headerOffline">
-      <a href="/" class="logo"><v-img src="../assets/logo_groupo.png" width="300px"> </v-img></a>
+      <a href="/" class="logo"><v-img src="../assets/logo_groupo.png" alt="logo" width="300px"> </v-img></a>
   </header>
 </template>
 

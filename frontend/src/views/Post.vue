@@ -35,8 +35,6 @@ export default {
 };
 </script>
 
-
-
 <style lang="scss">
 @import "../scss/mixins.scss";
 @import "../scss/variables.scss";
@@ -45,9 +43,7 @@ export default {
   @include flexcenter;
 }
 
-
 .return {
   margin-left: 1rem;
 }
-
 </style>

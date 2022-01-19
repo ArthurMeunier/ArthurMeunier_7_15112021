@@ -23,7 +23,7 @@
           </div>
         </div>
             <div class="posts__image">
-      <img  v-if="post.imageURL != null" class="posts__img"
+      <img v-if="post.imageURL != null" alt="postImage" class="posts__img"
         :src="'http://localhost:8081/images/'+ post.imageURL"/>
     </div>
 
@@ -171,7 +171,7 @@ export default {
     justify-content: center;
   }
   &__img {
-object-fit: cover !important;
+    object-fit: cover !important;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -261,7 +261,6 @@ object-fit: cover !important;
       margin-top: 0;
     }
   }
-
 }
 
 @media screen and (min-width:481px) and (max-width: 768px) {
@@ -275,7 +274,6 @@ object-fit: cover !important;
       height: 150px;
     }
   }
-
 }
 
 @media screen and (min-width:769px) and (max-width: 1024px) {
@@ -289,8 +287,5 @@ object-fit: cover !important;
       height: 150px;
     }
   }
-
 }
-
-
 </style>

@@ -1,12 +1,12 @@
-# Présentation du projet
+# Projet :
 
 Groupomania est un groupe spécialisé dans la grande distribution. Suite à la mise en place d'un comité de pilotage sur le bien-être au travail, l'entreprise a décidé de renforcer la communication entre les salariés en mettant en place un réseau social interne.
 
-# Objectifs
+# Objectif :
 
 - Développer la première version d'une application type 9GAG/Reddit (Réseau de partage de contenu img/gif/txt)
 
-## Spécifications fonctionnelles
+## Spécifications :
 - La présentation des fonctionnalités doit être simple
 - La création d'un compte doit être simple et possible depuis un téléphone mobile
 - Le profil doit contenir très peu d'informations pour que sa complétion soit rapide

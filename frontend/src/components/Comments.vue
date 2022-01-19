@@ -161,14 +161,12 @@ export default {
   }
 }
 
-
 @media screen and (max-width:480px) {
 
   .comments {
     width: 17rem;
     font-size: 12px;
   }
-
 }
 
 @media screen and (min-width:481px) and (max-width: 768px) {
@@ -176,7 +174,6 @@ export default {
   .comments {
     width: 25rem!important;
   }
-
 }
 
 @media screen and (min-width:769px) and (max-width: 1024px) {
@@ -184,9 +181,5 @@ export default {
   .comments {
     width: 40rem!important;
   }
-
-
 }
-
-
 </style>

@@ -123,29 +123,20 @@ export default {
 
 
 @media screen and (max-width:480px) {
-
   .login__card {
     width: 15rem;
   }
-
 }
 
 @media screen and (min-width:481px) and (max-width: 768px) {
-
   .login__card {
     width: 25rem;
   }
-
-
 }
 
 @media screen and (min-width:769px) and (max-width: 1024px) {
-
   .login__card {
     width: 30rem;
   }
-
-
 }
-
 </style>
